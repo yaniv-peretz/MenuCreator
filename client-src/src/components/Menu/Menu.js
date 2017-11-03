@@ -18,20 +18,27 @@ class Menu extends Component {
   }
 
   componentDidMount(){
-    let rest_id = 100;
-    this.loadData(rest_id);
+    // let rest_id = 100;
+    // this.loadData(rest_id);
+    this.loadData();
   }
 
-  loadData(rest_id){
-    let url ="http://localhost:8080/api/menu/v?rest_id=" + rest_id;
-    // url = "http://localhost:8080/api/menu/";
-    fetch(url)
+  // loadData(rest_id){
+  //   let url ="http://localhost:8080/api/menu/v?rest_id=" + rest_id;
+  //   fetch(url)
+  //         .then(response => response.json())
+  //         .then(json => {
+  //           this.setState({
+  //             data: json,
+  //           });
+  //         });
+  // }
+
+  loadData(){
+    let url ="http://localhost:8080/api/menu/";
+    fetch(url, {credentials: 'same-origin' })
           .then(response => response.json())
-          .then(json => {
-            this.setState({
-              data: json,
-            });
-          });
+          .then(json => this.setState({data: json}))
   }
 
   removeItem(key){

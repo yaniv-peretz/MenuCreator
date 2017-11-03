@@ -1,16 +1,13 @@
 const express = require('express');
 const con = require('../config/mysqlCon.js');
 const router = express.Router();
-
 const session = require('express-session');
 
 app.use(session({
-  secret: 'keyboard cat',
+  secret: 'a',
   resave: false,
-  saveUninitialized: true
+  saveUninitialized: true,
 }))
-
-
 
 
 router.post('/',approveUserPassword, function(req, res){
@@ -42,8 +39,10 @@ function approveUserPassword(req, res, next) {
     if(result.length > 0){
       req.session.auth = true;
       req.session.rest_id = result[0].id;
+
     }else{
       req.session.auth = false;
+
     }
 
     next();
