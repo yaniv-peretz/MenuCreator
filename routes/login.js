@@ -14,7 +14,6 @@ router.post('/',approveUserPassword, function(req, res){
 
   if(req.session.auth){
     let url = '/menu.html';
-    console.log(req.session.id);
     res.redirect(url);
 
   }else{
@@ -43,7 +42,7 @@ function approveUserPassword(req, res, next) {
 
     }else{
       req.session.auth = false;
-      
+
     }
 
     next();

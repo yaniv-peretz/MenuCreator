@@ -2,12 +2,6 @@ const express = require('express');
 const router = express.Router();
 const con = require('../config/mysqlCon.js');
 
-app.use(function(req, res, next) {
-  console.log(req.session.id);
-  console.log(req.session);
-  next();
-})
-
 router.get('/', function(req, res){
   if(req.session.auth == true){
 
