@@ -7,9 +7,15 @@
     "start": "node app.js"
   },
   "dependencies": {
+<<<<<<< HEAD
     "cookie-parser": "^1.4.3",
     "express": "*",
     "express-session": "^1.15.6",
+=======
+    "express": "*",
+    "express-session": "^1.15.6",
+    "cookie-parser": "^1.4.3",
+>>>>>>> 284bf473c32918eb03fb80fbaf79b3857b02e06b
     "mysql": "^2.15.0"
   },
   "author": "Yaniv Peretz",

@@ -3,13 +3,23 @@ import Item from './Item.js';
 import '../../js/checkAuth.js';
 import '../../style/Menu.css';
 
+var api ="http://localhost:8080/api/menu-item/";
+
 
 class Menu extends Component {
 
   constructor(props) {
     super(props);
 
-    this.state = {data: []};
+    this.state = {data: [
+      {
+        item_id : 1,
+        seq     : 1,
+        title   : "new name",
+        price   : 10,
+        descr   : "new description"
+      }
+    ]};
 
     this.removeItem = this.removeItem.bind(this);
     this.addItem = this.addItem.bind(this);
@@ -18,21 +28,10 @@ class Menu extends Component {
   }
 
   componentDidMount(){
-    // let rest_id = 100;
-    // this.loadData(rest_id);
+
     this.loadData();
   }
 
-  // loadData(rest_id){
-  //   let url ="http://localhost:8080/api/menu/v?rest_id=" + rest_id;
-  //   fetch(url)
-  //         .then(response => response.json())
-  //         .then(json => {
-  //           this.setState({
-  //             data: json,
-  //           });
-  //         });
-  // }
 
   loadData(){
     let url ="http://localhost:8080/api/menu/";
@@ -41,28 +40,37 @@ class Menu extends Component {
           .then(json => this.setState({data: json}))
   }
 
-  removeItem(key){
-    let menu = this.state.data;
-    menu.splice(key, 1);
-
-    this.setState({
-      data: menu
-    });
-  }
 
   addItem(key){
+
     let menu = this.state.data;
     let obj = {
-      title: "new name",
-      price: 10,
-      descr: "new description"
+      item_id : menu.length,
+      seq     : menu.length,
+      title   : "new name",
+      price   : 10,
+      descr   : "new description"
     }
+
     menu.splice(key, 0, obj );
 
     this.setState({
       data: menu
     });
+
+    var xhttp = new XMLHttpRequest();
+    xhttp.open("POST", api, true);
+    xhttp.setRequestHeader("Content-type", "application/json");
+    xhttp.send(JSON.stringify(obj));
+
+    // fetch(url, {credentials: 'same-origin',
+    //             'Content-type': "application/json",
+    //             method:'post',
+    //             body: JSON.stringify(obj) });
+    //TODO not clear why fetch is not working
+
   }
+
 
   editItem(key, field, newText){
     let menu = this.state.data;
@@ -88,6 +96,27 @@ class Menu extends Component {
     this.setState({
       data: menu
     });
+
+    var xhttp = new XMLHttpRequest();
+    xhttp.open("PUT", api, true);
+    xhttp.setRequestHeader("Content-type", "application/json");
+    xhttp.send(JSON.stringify(obj));
+  }
+
+
+  removeItem(key){
+    let menu = this.state.data;
+    let obj = menu[key];
+    menu.splice(key, 1);
+
+    this.setState({
+      data: menu
+    });
+
+    var xhttp = new XMLHttpRequest();
+    xhttp.open("DELETE", api, true);
+    xhttp.setRequestHeader("Content-type", "application/json");
+    xhttp.send(JSON.stringify(obj));
   }
 
   render() {
@@ -114,4 +143,3 @@ class Menu extends Component {
 
 }// end of Itme
 export default Menu;
-

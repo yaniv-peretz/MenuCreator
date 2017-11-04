@@ -107,7 +107,6 @@ router.delete('/', function(req, res){
       throw err;
 
     }else{
-      console.log(query);
       res.json("menu-item-delete-ok");
 
     }
