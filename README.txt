@@ -1,5 +1,4 @@
-Menu Creator
-======
+# Menu Creator
 is a personal project for creating, editing a viewing menus.
 Stack: NodeJS, ReactJS, MySql.
 
