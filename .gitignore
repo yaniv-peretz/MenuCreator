@@ -1,0 +1,6 @@
+/node_modules
+/public (copy)
+/client-src/node_modules
+/client-src/registerServiceWorker.js
+github
+github.pub
