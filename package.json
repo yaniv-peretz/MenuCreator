@@ -1,0 +1,18 @@
+{
+  "name": "quick-menu",
+  "version": "1.0.0",
+  "license": "ISC",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "express": "*",
+    "express-session": "^1.15.6",
+    "cookie-parser": "^1.4.3",
+    "mysql": "^2.15.0"
+  },
+  "author": "Yaniv Peretz",
+  "devDependencies": {},
+  "description": ""
+}
