@@ -1,19 +1,24 @@
-#Menu Creator
-is a personal project for creating, editing a viewing menus.
-Stack: NodeJS, ReactJS, MySql.
+# Menu Creator
+A personal project for creating, editing a viewing user created menus.
+Tech stack: NodeJS, ReactJS, MySql.
+
 
 prerequisite:
-NodeJS installed.
-MySql server installed on port 3306, 
-uid: "root"
-psw: "root"
+-------------
+1. NodeJS installed.
+2. MySql server installed
++ port: 3306, 
++ uid: "root"
++ psw: "root"
 
 
-#How to run
-bring dependencies mpdules by npm "install"
-run "npm start"
-and surf to localhost:8080
+How to run
+-----------
+1. enter npm "install" to bring all required node_modules.
+2. enter "npm start"
+3. on the browser, surf to localhost:8080
 
 
-#Status
+Status
+------
 currently the client side react is not activited
