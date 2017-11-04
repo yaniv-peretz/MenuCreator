@@ -4,17 +4,18 @@ Stack: NodeJS, ReactJS, MySql.
 
 prerequisite:
 -------------
-NodeJS installed.
-MySql server installed on port 3306, 
-uid: "root"
-psw: "root"
+1. NodeJS installed.
+2. MySql server installed
++ port: 3306, 
++ uid: "root"
++ psw: "root"
 
 
 How to run
 -----------
-bring dependencies mpdules by npm "install"
-run "npm start"
-and surf to localhost:8080
+1. enter npm "install" to bring all required node_modules.
+2. enter "npm start"
+3. on the browser, surf to localhost:8080
 
 
 Status
