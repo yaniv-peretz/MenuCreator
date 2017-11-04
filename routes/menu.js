@@ -7,7 +7,7 @@ router.get('/', function(req, res){
 
     let rest_id = req.session.rest_id;
     let query = "SELECT * FROM Menu_Items " +
-    "WHERE rest_id=" + rest_id + ";";
+                "WHERE rest_id=" + rest_id + ";";
 
     con.query(query, function (err, result, fields) {
       if (err){
@@ -27,7 +27,7 @@ router.get('/', function(req, res){
 router.get('/v', function(req, res){
   let rest_id = req.query.rest_id;
   let query = "SELECT * FROM Menu_Items " +
-  "WHERE rest_id=" + rest_id + ";";
+              "WHERE rest_id=" + rest_id + ";";
 
   con.query(query, function (err, result, fields) {
     if (err){
