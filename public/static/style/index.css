@@ -1,0 +1,26 @@
+body{
+  text-align: center;
+}
+
+h1{
+  text-align: center;
+}
+
+form{
+  display: inline-block;
+}
+
+#login-form{
+  display: inline-block;
+  margin: auto;
+  border: 1px solid black;
+}
+
+#login-form td:first-child{
+  text-align: right;
+}
+
+.buttons{
+  align-items: center;
+  text-align: center;
+}

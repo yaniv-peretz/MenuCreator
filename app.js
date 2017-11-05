@@ -1,4 +1,6 @@
 const express = require('express');
+const path    = require('path');
+
 const app = express();
 global.app = app;
 
@@ -12,7 +14,7 @@ require('./config/accessControl.js');
 * url Handeling sequance
 * #######################*/
 // setting routes for static webpages
-app.use(express.static('public'));
+app.use( express.static(path.join(__dirname, 'public')))
 // setting routes for API
 const routes = require('./routes/index.js');
 app.use('/api', routes);
