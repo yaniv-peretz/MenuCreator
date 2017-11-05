@@ -1,6 +1,6 @@
 # Menu Creator
-A personal project for creating, editing a viewing user created menus.
-Tech stack: NodeJS, ReactJS, MySql.
+A personal project for creating, editing a viewing user created menus. <br />
+<b>Tech stack:</b> NodeJS, ReactJS, MySql.
 
 
 prerequisite:
