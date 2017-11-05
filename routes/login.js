@@ -84,20 +84,6 @@ router.post('/reg', function(req, res){
   });
 });
 
-    // console.log(query);
-    //             //   ,
-    //             //   "INSERT INTO Menu_Items (rest_id, item_id=1, seq=1, title='new title', descr='description', price=10) " +
-    //             //     "SELECT id  "               +
-    //             //     "FROM Users "                                                        +
-    //             //     "WHERE email='"+email+"' AND password='"+psw+"';"
-    //             //   ,
-    //             //   "SELECT id FROM Users " +
-    //             //   "WHERE email= '" + email + "' AND " +
-    //             //   "password='" + psw + "'"
-    //             // ];
-    //
-
-
 
 router.get('/check', function(req, res){
   if(req.session.auth){
