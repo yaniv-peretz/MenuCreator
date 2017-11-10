@@ -24,8 +24,8 @@ router.get('/', function(req, res){
 });
 
 
-router.get('/v', function(req, res){
-  let rest_id = req.query.rest_id;
+router.get('/view-menu/:rest_id', function(req, res){
+  let rest_id = req.params.rest_id;
   let query = "SELECT * FROM Menu_Items " +
               "WHERE rest_id=" + rest_id + ";";
 

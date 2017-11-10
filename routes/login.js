@@ -10,15 +10,20 @@ app.use(session({
 }))
 
 
+// router.post('/', function(req, res){
+//     let url = '/index.html';
+//     res.redirect(url);
+//   });
+
 router.post('/',approveUserPassword, function(req, res){
 
   if(req.session.auth){
-    let url = '/menu.html';
+    let url = '/edit-menu';
     res.redirect(url);
 
   }else{
     req.session.auth = false;
-    let url = '/index.html';
+    let url = '/';
     res.redirect(url);
 
   }
@@ -29,9 +34,9 @@ function approveUserPassword(req, res, next) {
 
   let email = req.body.email;
   let psw = req.body.psw;
-  let query = "SELECT id FROM Users " +
+  let query = "SELECT id FROM Users "             +
               "WHERE email= '" + email + "' AND " +
-              "password='" + psw + "'";
+              "password='" + psw + "'"            ;
 
   con.query(query, function (err, result, fields) {
     if (err) throw err;
@@ -54,25 +59,27 @@ router.post('/reg', function(req, res){
   let psw = req.body.psw;
   let sql;
 
+  //inset new user
   sql = "INSERT INTO Users (email, password) " +
           "VALUES ('"+email+"', '"+psw+"');";
   con.query(sql, function (err, result, fields) {
     if (err) throw err;
   });
 
-  sql = "INSERT INTO Menu_Items "       +
-        "(rest_id, item_id, seq) "  +
-          "SELECT id, 0, 0  "                 +
-          "FROM Users "                 +
-          "WHERE email='"+email+"' AND password='"+psw+"';";
+  //inset first menu item
+  sql = "INSERT INTO Menu_Items "                           +
+        "(rest_id, item_id, seq) "                          +
+          "SELECT id, 0, 0  "                               +
+          "FROM Users "                                     +
+          "WHERE email='"+email+"' AND password='"+psw+"';" ;
   con.query(sql, function (err, result, fields) {
     if (err) throw err;
   });
 
-
-  let query = "SELECT id FROM Users " +
+  //and set session data
+  let query = "SELECT id FROM Users "             +
               "WHERE email= '" + email + "' AND " +
-              "password='" + psw + "'";
+              "password='" + psw + "'"            ;
   con.query(query, function (err, result, fields) {
     if (err) throw err;
 
