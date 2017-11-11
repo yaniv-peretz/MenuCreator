@@ -25,13 +25,14 @@ New Additions
 + Creation of initial DB schema 
 + support for Resturant name
 + logout header
++ initial example gif
 
 
 In Process
 -----------
-+ control for menu sequanced
-+ initial example gid
++ control for menu sequance
 + support for section titles
++ fix example gif
 
 
 
