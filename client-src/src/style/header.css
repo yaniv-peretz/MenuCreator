@@ -41,3 +41,9 @@ body{
 .loginInput{
   width: 155px;
 }
+
+
+.login-buttons{
+  display: flex;
+  flex-direction: column;
+}

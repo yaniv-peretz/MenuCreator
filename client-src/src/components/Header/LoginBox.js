@@ -9,9 +9,9 @@ class LoginBox extends Component {
           <div><span>Email:</span><input name="email" className="loginInput"/> </div>
           <div><span>Password:</span><input name="psw" type="password" className="loginInput"/> </div>
         </div>
-        <div>
-          <input id="login-sub" type="submit" value="LogIn"/>
-          <button type="submit" formaction="/api/login/reg">Register New user</button>
+        <div className="login-buttons">
+          <input id="login-sub" type="submit" value="Log In"/>
+          <button type="submit" formAction='http://localhost:8080/api/login/reg'>Sign In</button>
         </div>
         </form>
       </div>

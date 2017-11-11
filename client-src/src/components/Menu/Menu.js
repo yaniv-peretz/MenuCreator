@@ -3,7 +3,7 @@ import Item from './Item.js';
 import '../../js/checkAuth.js';
 import '../../style/Menu.css';
 
-var api ="http://localhost:8080/api/menu-item/";
+var api ='http://localhost:8080/api/menu-item/';
 
 
 class Menu extends Component {
@@ -34,10 +34,13 @@ class Menu extends Component {
 
 
   loadData(){
-    let url ="http://localhost:8080/api/menu/";
+    let url ='http://localhost:8080/api/menu';
     fetch(url, {credentials: 'same-origin' })
           .then(response => response.json())
-          .then(json => this.setState({data: json}))
+          .then(json => {
+            this.setState({data: json});
+            console.log(json)
+          })
   }
 
 

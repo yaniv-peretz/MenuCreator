@@ -7,7 +7,7 @@ class ItemContect extends Component {
     let descr = this.props.descr;
 
     if(this.props.editMode){
-      let itemName  = title+this.props.index;
+      let itemName  = title + this.props.index;
       let itemPrice = price + this.props.index;
       let itemDescr = descr + this.props.index;
 

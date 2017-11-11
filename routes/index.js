@@ -3,6 +3,8 @@ const app = express();
 
 var route = require('./login.js');
 app.use('/login', route);
+var route = require('./rest-name.js');
+app.use('/rest-name', route);
 var route = require('./menu.js');
 app.use('/menu', route);
 var route = require('./menu-item.js');

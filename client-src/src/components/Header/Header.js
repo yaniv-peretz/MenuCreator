@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import LoginBox from './LoginBox.js';
 import '../../style/header.css';
 
+
 class Header extends Component {
 
   render() {

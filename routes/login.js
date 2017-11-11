@@ -10,15 +10,11 @@ app.use(session({
 }))
 
 
-// router.post('/', function(req, res){
-//     let url = '/index.html';
-//     res.redirect(url);
-//   });
-
 router.post('/',approveUserPassword, function(req, res){
 
   if(req.session.auth){
     let url = '/edit-menu';
+    
     res.redirect(url);
 
   }else{
@@ -86,7 +82,7 @@ router.post('/reg', function(req, res){
     req.session.auth = true;
     req.session.rest_id = result[0].id;
 
-    let url = '/menu.html';
+    let url = '/edit-menu';
     res.redirect(url);
   });
 });

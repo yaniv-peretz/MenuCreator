@@ -4,16 +4,17 @@ const con = require('../config/mysqlCon.js');
 const session = require('express-session');
 var rest_id;
 
-app.use(function(req, res, next){
-  if(req.session.auth == true){
-    rest_id = req.session.rest_id;
+function checkAuth(req, res, next) {
+  if (!req.session.auth) {
+    res.json("no auth for menu-item");
   }
+  rest_id = req.session.rest_id;
   next()
-})
+};
 
 router.get(':item_id', function(req, res){
 
-  let item_id = req.item_id;
+  let item_id = req.params.item_id;
 
   let query = "SELECT FROM Menu_Items " +
               "WHERE rest_id='" + rest_id + "' AND" +
@@ -28,7 +29,8 @@ router.get(':item_id', function(req, res){
 
 });
 
-router.post('/', function(req, res){
+
+router.post('/', checkAuth, function(req, res){
 
   let item_id = req.body.item_id;
   let seq     = req.body.seq;
@@ -52,7 +54,7 @@ router.post('/', function(req, res){
     throw err;
 
     }else{
-    res.json("menu-item-post-ok");
+      res.json("");
     }
 
   });
@@ -60,7 +62,7 @@ router.post('/', function(req, res){
 });
 
 
-router.put('/', function(req, res){
+router.put('/', checkAuth, function(req, res){
   let item_id = req.body.item_id;
   let seq     = req.body.seq;
   let title   = req.body.title;
@@ -84,7 +86,7 @@ router.put('/', function(req, res){
       throw err;
 
     }else{
-      res.json("menu-item-put-ok");
+      res.json("");
 
     }
   });
@@ -92,7 +94,7 @@ router.put('/', function(req, res){
 });
 
 
-router.delete('/', function(req, res){
+router.delete('/', checkAuth, function(req, res){
 
   let item_id = req.body.item_id;
   let query = "DELETE FROM Menu_Items "         +
