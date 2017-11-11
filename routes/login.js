@@ -50,6 +50,14 @@ function approveUserPassword(req, res, next) {
 }
 
 
+router.post('/out', function(req, res){
+  let url = '/';    
+  res.redirect(url);
+  req.session.auth = false;
+
+  });
+
+
 router.post('/reg', function(req, res){
   let email = req.body.email;
   let psw = req.body.psw;
@@ -97,5 +105,16 @@ router.get('/check', function(req, res){
   }
 });
 
+
+router.get('/rest_id', function(req, res){
+
+  if(req.session.auth){
+    res.json(req.session.rest_id);
+
+  }else{
+    res.json(0);
+  }
+
+});
 
 module.exports = router;

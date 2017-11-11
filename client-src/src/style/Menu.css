@@ -11,9 +11,7 @@
 .Menu-Item-Container{
   padding: 5px;
   border-bottom: 1px dashed grey;
-
   display: -ms-flexbox;
-
   display: flex;
   -ms-flex-direction: row;
       flex-direction: row;
@@ -30,9 +28,13 @@
   flex-grow: 1;
 }
 
-.master-details{
+.item-title{
   display: flex;
   justify-content: space-between;
+}
+
+.item-descr{
+  font-size: calc(100% - 4px);
 }
 
 .User-Buttons{

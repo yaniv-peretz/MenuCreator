@@ -6,23 +6,20 @@ class MenuTitle extends Component {
     constructor(props) {
         super(props);
         this.state = {
-          resturantName: ""
+          resturantName: "",
+          viewUrl: "http://localhost:8080/view-menu/"
         }
 
         }
 
     componentDidMount(){
-      this.loadtitle();
+      this.loadTitle();
+      this.loadLink();
       
     }
     
-    loadtitle(){
+    loadTitle(){
       let url ="http://localhost:8080/api/rest-name/";
-
-      if(window.location.pathname.includes("/view-menu/")){
-        let id = window.location.pathname.substring("/view-menu".length + 1); 
-        url += id 
-      }
       
       fetch(url, {credentials: 'same-origin' })
             .then(response => response.json())
@@ -32,12 +29,29 @@ class MenuTitle extends Component {
 
   }
 
+  loadLink() {
+    let url = "http://localhost:8080/api/login/rest_id";
+
+    fetch(url, { credentials: 'same-origin' })
+      .then(response => response.json())
+      .then(json => {
+        this.setState({ viewUrl: this.state.viewUrl+json });
+      })
+  }
+
   render() {
+
     return (
       <div className="rest-title">
         <h1>{this.state.resturantName}</h1>
         <Router>
-          <Route exact path='/edit-menu'    render={() => ( <h3>edit your menu</h3> )}/>
+          <Route exact path='/edit-menu'    render={() => (
+            <div className="title-edit-items">
+              <h3>edit your menu</h3> 
+              <p>you can view the menu at <a href={this.state.viewUrl} target="_blank">Link</a></p>
+            </div>
+            
+            )}/>
         </Router>
       </div>
     );

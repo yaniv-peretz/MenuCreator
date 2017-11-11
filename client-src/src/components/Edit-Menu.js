@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import Header from './components/Header/Header.js';
-import Menu from './components/Menu/Menu.js';
-import MenuTitle from './components/MenuTitle/MenuTitle.js';
+import Header from './Header/Header.js';
+import Menu from './Menu/Menu.js';
+import MenuTitle from './MenuTitle/MenuTitle.js';
 
 
 class EditMenu extends Component {

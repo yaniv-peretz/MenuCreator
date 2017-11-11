@@ -24,14 +24,13 @@ New Additions
 -----------
 + Creation of initial DB schema 
 + support for Resturant name
++ logout header
 
 
 In Process
 -----------
-+ initial example data
++ initial example gid
 + control for menu sequance
-+ main page datails prompt to login in or view
-+ logout header
 + support for section titles
 
 

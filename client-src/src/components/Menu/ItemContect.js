@@ -49,9 +49,9 @@ class ItemContect extends Component {
     }else{
       return(
         <div className="Item">
-          <div className="master-details"><div>{this.props.title}</div>
+          <div className="item-title"><div>{this.props.title}</div>
           <div>{price}</div></div>
-          <div className="descr">{descr}</div>
+          <div className="item-descr">{descr}</div>
         </div>
       )
 
