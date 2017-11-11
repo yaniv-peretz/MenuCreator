@@ -3,3 +3,9 @@ body {
   padding: 0;
   font-family: sans-serif;
 }
+
+.demo-pic{
+  display: block;
+  margin: auto;
+  margin-top: 10px;
+}

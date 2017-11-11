@@ -29,8 +29,8 @@ New Additions
 
 In Process
 -----------
++ control for menu sequanced
 + initial example gid
-+ control for menu sequance
 + support for section titles
 
 
