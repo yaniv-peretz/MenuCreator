@@ -27,7 +27,7 @@ New Additions
 + logout header
 + initial example gif
 + control for menu sequance
-
++ support for enviroment ports
 
 In Process
 -----------

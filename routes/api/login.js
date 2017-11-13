@@ -12,10 +12,19 @@ app.use(session({
 
 router.post('/',approveUserPassword, function(req, res){
 
-  console.log(new Date() + ":" + req.sessionID)
+  var refer = req.rawHeaders[15]
+  var port;
 
   if(req.session.auth){
-    let url = 'http://localhost:8080/edit-menu';
+    if(refer.includes('3000')){
+      port = 3000;
+
+    }else{
+      port = 8080;
+
+    }
+
+    let url = 'http://localhost:'+port+'/edit-menu';
     
     res.redirect(url);
 
