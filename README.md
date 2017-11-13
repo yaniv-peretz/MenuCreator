@@ -26,11 +26,11 @@ New Additions
 + support for Resturant name
 + logout header
 + initial example gif
++ control for menu sequance
 
 
 In Process
 -----------
-+ control for menu sequance
 + support for section titles
 + fix example gif
 
