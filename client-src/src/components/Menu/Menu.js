@@ -120,6 +120,12 @@ class Menu extends Component {
     })
     menu.splice(objIndex, 1);
 
+    menu.forEach(element => {
+      if(element.seq > key){
+        element.seq--
+        }
+    });
+
     this.setState({
       data: menu
     });

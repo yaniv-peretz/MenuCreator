@@ -25,7 +25,6 @@ router.post('/',approveUserPassword, function(req, res){
     }
 
     let url = 'http://localhost:'+port+'/edit-menu';
-    
     res.redirect(url);
 
   }else{

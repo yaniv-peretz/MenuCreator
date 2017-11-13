@@ -10,8 +10,5 @@ app.use('/menu', route);
 var route = require('./api/menu-item.js');
 app.use('/menu-item', route);
 
-// for test only
-// var route = require('./api/SetTestAuth.js');
-// app.use('/setTest', route);
 
 module.exports = app;

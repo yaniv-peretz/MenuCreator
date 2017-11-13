@@ -16,13 +16,13 @@ router.get(':item_id', function(req, res){
 
   let item_id = req.params.item_id;
 
-  let query = "SELECT FROM Menu_Items " +
+  let sql = "SELECT FROM Menu_Items " +
               "WHERE rest_id='" + rest_id + "' AND" +
               "item_id='" + item_id + "'";
 
-  con.query(query, function (err, result, fields) {
+  con.query(sql, function (err, result, fields) {
     if (err) {
-      console.log(query);
+      console.log(sql);
     throw err;
     }
   });
