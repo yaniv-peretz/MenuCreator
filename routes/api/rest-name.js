@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const con = require('../config/mysqlCon.js');
+const con = require('../../config/mysqlCon.js');
 const session = require('express-session');
 
 router.get('/:rest_id', function (req, res, next) {

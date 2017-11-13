@@ -24,38 +24,44 @@ class Menu extends Component {
     this.removeItem = this.removeItem.bind(this);
     this.addItem = this.addItem.bind(this);
     this.editItem = this.editItem.bind(this);
-
   }
 
   componentDidMount(){
-
-    this.loadData();
-  }
-
-
-  loadData(){
     let url ='http://localhost:8080/api/menu';
     fetch(url, {credentials: 'same-origin' })
           .then(response => response.json())
           .then(json => {
+            json.sort((a,b)=>(a.seq - b.seq))
             this.setState({data: json});
-            console.log(json)
           })
   }
+
+
+  setMenu(menu){
+    this.setState({
+      data: this.responseText
+    });
+  }descr
 
 
   addItem(key){
 
     let menu = this.state.data;
+    menu.forEach(element => {
+      if(element.seq > key){
+        element.seq++
+      }
+    });
+
     let obj = {
       item_id : menu.length,
-      seq     : menu.length,
+      seq     : key+1,
       title   : "new name",
       price   : 10,
       descr   : "new description"
     }
-
-    menu.splice(key, 0, obj );
+    
+    menu.splice(key + 1, 0, obj)
 
     this.setState({
       data: menu
@@ -65,12 +71,6 @@ class Menu extends Component {
     xhttp.open("POST", api, true);
     xhttp.setRequestHeader("Content-type", "application/json");
     xhttp.send(JSON.stringify(obj));
-
-    // fetch(url, {credentials: 'same-origin',
-    //             'Content-type': "application/json",
-    //             method:'post',
-    //             body: JSON.stringify(obj) });
-    //TODO not clear why fetch is not working
 
   }
 
@@ -109,13 +109,22 @@ class Menu extends Component {
 
   removeItem(key){
     let menu = this.state.data;
-    let obj = menu[key];
-    menu.splice(key, 1);
+
+    let obj = menu.find(function (element) {
+      return element.seq == key      
+    })
+
+    //delete object form client size
+    let objIndex = menu.findIndex(function (element) {
+      return element.seq == key      
+    })
+    menu.splice(objIndex, 1);
 
     this.setState({
       data: menu
     });
 
+    //delet object from DB
     var xhttp = new XMLHttpRequest();
     xhttp.open("DELETE", api, true);
     xhttp.setRequestHeader("Content-type", "application/json");

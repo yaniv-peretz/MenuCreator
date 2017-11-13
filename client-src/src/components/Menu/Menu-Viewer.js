@@ -32,7 +32,10 @@ class Menu extends Component {
     let url = api;
     fetch(url, {credentials: 'same-origin' })
           .then(response => response.json())
-          .then(json => this.setState({data: json}))
+          .then(json => {
+            json.sort((a,b)=>(a.seq - b.seq))
+            this.setState({data: json})
+            })
   }
 
 

@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const con = require('../config/mysqlCon.js');
+const con = require('../../config/mysqlCon.js');
 const session = require('express-session');
 var rest_id;
 
@@ -38,26 +38,34 @@ router.post('/', checkAuth, function(req, res){
   let descr    = req.body.descr;
   let price   = req.body.price;
 
-  let query = "INSERT INTO Menu_Items " +
-                "VALUES ("              +
-                  rest_id + ","         +
-                  item_id + ","         +
-                  seq     + ","         +
-                  "'" + title + "',"    +
-                  "'" + descr + "',"    +
-                  price                 +
-                ");";
+  let sql = [
+    "UPDATE Menu_Items "              +
+    "set seq = seq + 1 "              +
+    "WHERE "                          +
+      "rest_id="     + rest_id + " "  +     
+      "AND seq >= " + seq 
+    ,
 
-  con.query(query, function (err, result, fields) {
-    if (err) {
-      console.log(query);
-    throw err;
-
-    }else{
-      res.json("");
-    }
-
-  });
+    "INSERT INTO Menu_Items " +
+      "VALUES ("              +
+        rest_id + ","         +
+        item_id + ","         +
+        seq     + ","         +
+        "'" + title + "',"    +
+        "'" + descr + "',"    +
+        price                 +
+        ");"
+  ]
+  
+  for (let i = 0; i < sql.length; i++) {
+    con.query(sql[i], function (err, result, fields) {
+      if (err) {
+        console.log(sql[i]);
+        throw err;
+      }
+    });
+  }
+  res.json("");
 
 });
 
@@ -97,23 +105,41 @@ router.put('/', checkAuth, function(req, res){
 router.delete('/', checkAuth, function(req, res){
 
   let item_id = req.body.item_id;
-  let query = "DELETE FROM Menu_Items "         +
-              "WHERE "                          +
-                "rest_id="     + rest_id + " "  +
-                "AND item_id=" + item_id + ";";
+  let seq = req.body.seq;
+  let sql = [
+    "DELETE FROM Menu_Items "         +
+    "WHERE "                          +
+      "rest_id="     + rest_id + " "  +
+      "AND item_id=" + item_id + ";"
 
+    ,
 
-  con.query(query, function (err, result, fields) {
-    if (err) {
-      console.log(query);
-      throw err;
+    "UPDATE Menu_Items "              +
+    "SET item_id  = item_id -1 "      +
+    "WHERE "                          +
+      "rest_id="     + rest_id + " "  +     
+      "AND item_id > "+ item_id
 
-    }else{
-      res.json("menu-item-delete-ok");
+    ,
 
-    }
+    "UPDATE Menu_Items "              +
+    "SET seq  = seq -1 "              +
+    "WHERE "                          +
+      "rest_id="     + rest_id + " "  +     
+      "AND seq > " + seq 
 
-  });
+  ]
+                
+  for (let i = 0; i < sql.length; i++) {
+    con.query(sql[i], function (err, result, fields) {
+      if (err) {
+        console.log(sql[i]);
+        throw err;
+      }
+    });  
+  }
+
+  res.json("menu-item-delete-ok");
 
 });
 

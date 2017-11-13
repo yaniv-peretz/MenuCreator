@@ -1,20 +1,22 @@
 const express = require('express');
 const router = express.Router();
-const con = require('../config/mysqlCon.js');
+const con = require('../../config/mysqlCon.js');
 
 function checkAuth(req, res, next) {
+  console.log(new Date() + ":" + req.sessionID)
+  
   if(!req.session.auth){
     res.json("no auth for menu");
-    }else{
 
+    }else{
       next()
+
     }
-  
 };
 
 
 router.get('/', checkAuth, function(req, res){
-
+  
     let sql = "SELECT * FROM Menu_Items " +
                 "WHERE rest_id=" + req.session.rest_id + ";";
     

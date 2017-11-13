@@ -1,5 +1,5 @@
 const express = require('express');
-const con = require('../config/mysqlCon.js');
+const con = require('../../config/mysqlCon.js');
 const router = express.Router();
 const session = require('express-session');
 
@@ -12,8 +12,10 @@ app.use(session({
 
 router.post('/',approveUserPassword, function(req, res){
 
+  console.log(new Date() + ":" + req.sessionID)
+
   if(req.session.auth){
-    let url = '/edit-menu';
+    let url = 'http://localhost:8080/edit-menu';
     
     res.redirect(url);
 
