@@ -26,13 +26,13 @@ New Additions
 + support for Resturant name
 + logout header
 + initial example gif
++ fix example gif
 + control for menu sequance
 + support for enviroment ports
 
 In Process
 -----------
 + support for section titles
-+ fix example gif
 
 
 
