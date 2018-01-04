@@ -2,9 +2,8 @@ import React, { Component } from 'react';
 import Item from './Item.js';
 import '../../js/checkAuth.js';
 import '../../style/Menu.css';
-import port from "../../api-config/api-config.js";
 
-var api ='http://localhost:'+port+'/api/menu-item/';
+var api ='/api/menu-item/';
 
 class Menu extends Component {
 
@@ -27,7 +26,7 @@ class Menu extends Component {
   }
 
   componentDidMount(){
-    let url ='http://localhost:'+port+'/api/menu';
+    let url ='/api/menu';
     fetch(url, {credentials: 'same-origin' })
           .then(response => response.json())
           .then(json => {

@@ -1,5 +1,5 @@
 const express = require('express');
-const path    = require('path');
+const path = require('path');
 
 const app = express();
 global.app = app;
@@ -9,12 +9,11 @@ require('./config/accessControl.js');
 
 
 
-
 /*#######################
 * url Handeling sequance
 * #######################*/
 // setting routes for static webpages
-app.use( express.static(path.join(__dirname, 'public')))
+app.use(express.static(path.join(__dirname, 'public')))
 // setting routes for API
 const routes = require('./routes/index.js');
 app.use('/api', routes);
@@ -27,6 +26,6 @@ require('./config/errorHandeling.js');
 
 
 //Start listen on port
-const port = 8080;
+const port = 8081;
 app.listen(port);
 console.log("Node js listen on port " + port + "...");

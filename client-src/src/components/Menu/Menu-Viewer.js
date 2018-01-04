@@ -3,7 +3,7 @@ import DisplayItem from './DisplayItem.js';
 import '../../style/Menu.css';
 
 let path = window.location.pathname;
-var api ="http://localhost:8080/api/menu"+path;
+var api ="api/menu"+path;
 
 class Menu extends Component {
 

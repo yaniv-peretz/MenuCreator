@@ -12,7 +12,7 @@ function checkAuth() {
         }
     };
 
-    let url ="http://localhost:8080/api/login/check";
+    let url ="api/login/check";
     xhttp.open("get", url, true);
     xhttp.send();
   }

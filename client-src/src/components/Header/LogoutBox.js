@@ -4,7 +4,7 @@ class LogoutBox extends Component {
     render() {
         return (
             <div className="login-buttons">
-                <form method="post" action='http://localhost:8080/api/login/out'> 
+                <form method="post" action='/api/login/out'> 
                     <input type="submit" value="LogOut" />
                 </form>
             </div>

@@ -3,14 +3,12 @@ const router = express.Router();
 const con = require('../../config/mysqlCon.js');
 const session = require('express-session');
 
-router.get('/:rest_id', function (req, res, next) {
-  let id = req.params.rest_id
-  let sql = "SELECT rest_name FROM Users " +
-  "WHERE id=" + id;
+router.get('/', (req, res, next) => {
+  let id = req.session.rest_id;
+  let sql = `SELECT rest_name FROM Users WHERE id=${id}`;
   
-  con.query(sql, function (err, result, fields) {
+  con.query(sql, (err, result, fields) => {
     if (err) {
-      console.log(sql);
       throw err;
     }
     res.json(result[0].rest_name);

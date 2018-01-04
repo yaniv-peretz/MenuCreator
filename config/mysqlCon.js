@@ -1,8 +1,8 @@
 const mysql = require('mysql');
 let con = mysql.createConnection({
   host: "localhost",
-  user: "root",
-  password: "root"
+  user: "menuSystem",
+  password: "menuSystem"
   
 });
 
@@ -22,8 +22,8 @@ con.query(sql, function (err, result, fields) {
 
 con = mysql.createConnection({
   host: "localhost",
-  user: "root",
-  password: "root",
+  user: "menuSystem",
+  password: "menuSystem",
   database: "MyMenu"
 
 });

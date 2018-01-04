@@ -3,7 +3,7 @@ getMenu(id);
 
 
 function getMenu(id) {
-  let url ="http://localhost:8080/api/menu?id=" + id;
+  let url ="api/menu?id=" + id;
   ajax("get", url, setMenu)
 }
 

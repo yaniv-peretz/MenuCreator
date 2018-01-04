@@ -7,7 +7,7 @@ class MenuTitle extends Component {
         super(props);
         this.state = {
           resturantName: "",
-          viewUrl: "http://localhost:8080/view-menu/"
+          viewUrl: "view-menu/"
         }
 
         }
@@ -19,20 +19,20 @@ class MenuTitle extends Component {
     }
     
     loadTitle(){
-      let url ="http://localhost:8080/api/rest-name/";
+      let url = `api/rest-name/`;
       
-      fetch(url, {credentials: 'same-origin' })
+      fetch(url, {credentials: 'same-origin' })      
             .then(response => response.json())
             .then(json => {
-              this.setState({resturantName: json});
+              this.setState({resturantName: 'restMenu'});
     })
 
   }
 
   loadLink() {
-    let url = "http://localhost:8080/api/login/rest_id";
+    let url = "api/login/rest_id";
 
-    fetch(url, { credentials: 'same-origin' })
+    fetch(url)
       .then(response => response.json())
       .then(json => {
         this.setState({ viewUrl: this.state.viewUrl+json });

@@ -7,7 +7,7 @@ getEditMenu();
 
 
 function getEditMenu() {
-  let url ="http://localhost:8080/api/menu/";
+  let url ="api/menu/";
   ajax("get", url, setEditMenu)
 }
 
@@ -58,7 +58,7 @@ function addItem(index){
     edit    : false
   };
 
-  let url ="http://localhost:8080/api/menu-item";
+  let url ="api/menu-item";
   let params = JSON.stringify(newItem);
   ajaxSend("post", url, params);
 
@@ -72,7 +72,7 @@ function addItem(index){
 function removeItem(index, item_id){
   list.splice(index, 1);
 
-  let url ="http://localhost:8080/api/menu-item";
+  let url ="api/menu-item";
   let params = JSON.stringify( {rest_id:id, item_id:item_id} );
   ajaxSend("delete", url, params);
 
@@ -90,7 +90,7 @@ function editItem(index){
     item.price  = document.querySelector('#price'+index).value;
     item.descr  = document.querySelector('#descr'+index).value;
 
-    let url ="http://localhost:8080/api/menu-item";
+    let url ="api/menu-item";
     let params = JSON.stringify(item);
     ajaxSend("put", url, params);
   }

@@ -3,6 +3,9 @@ const con = require('../../config/mysqlCon.js');
 const router = express.Router();
 const session = require('express-session');
 
+
+
+
 app.use(session({
   secret: 'a',
   resave: false,
@@ -20,7 +23,7 @@ router.post('/',approveUserPassword, function(req, res){
       port = 3000;
 
     }else{
-      port = 8080;
+      port = 8081;
 
     }
 
@@ -67,41 +70,40 @@ router.post('/out', function(req, res){
 
   });
 
-
-router.post('/reg', function(req, res){
+router.post('/reg', (req, res) => {
   let email = req.body.email;
-  let psw = req.body.psw;
+  let passowrd = req.body.passowrd;
   let sql;
 
   //inset new user
-  sql = "INSERT INTO Users (email, password) " +
-          "VALUES ('"+email+"', '"+psw+"');";
+  sql = `INSERT INTO Users (email, password) 
+          VALUES ('${email}' , '${passowrd}');`;
   con.query(sql, function (err, result, fields) {
     if (err) throw err;
   });
 
   //inset first menu item
-  sql = "INSERT INTO Menu_Items "                           +
-        "(rest_id, item_id, seq) "                          +
-          "SELECT id, 0, 0  "                               +
-          "FROM Users "                                     +
-          "WHERE email='"+email+"' AND password='"+psw+"';" ;
+  sql = `INSERT INTO Menu_Items
+        (rest_id, item_id, seq)
+          SELECT id, 0, 0
+          FROM Users
+          WHERE email='${email}' AND password='${passowrd}';`;
   con.query(sql, function (err, result, fields) {
     if (err) throw err;
   });
 
   //and set session data
-  let query = "SELECT id FROM Users "             +
-              "WHERE email= '" + email + "' AND " +
-              "password='" + psw + "'"            ;
+  let query = `SELECT id FROM Users
+              WHERE email= '${email}' AND password='${passowrd}';`;
   con.query(query, function (err, result, fields) {
     if (err) throw err;
 
     req.session.auth = true;
     req.session.rest_id = result[0].id;
+    console.log(req.sessionID)
+    console.log(`setting session rest_id:${req.session.rest_id} and ${req.session.auth}`);
 
-    let url = '/edit-menu';
-    res.redirect(url);
+    res.sendStatus(200);
   });
 });
 
@@ -116,8 +118,9 @@ router.get('/check', function(req, res){
 });
 
 
-router.get('/rest_id', function(req, res){
-
+router.get('/rest_id', (req, res) => {
+  console.log(req.sessionID)
+  console.log(`req.session.auth:${req.session.auth}`)
   if(req.session.auth){
     res.json(req.session.rest_id);
 

@@ -16,7 +16,7 @@ How to run
 -----------
 1. enter "npm install" to bring all required node_modules.
 2. enter "npm start"
-3. on the browser, surf to localhost:8080
+3. on the browser, surf to localhost:8081
 
 
 
