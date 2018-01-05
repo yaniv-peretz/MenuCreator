@@ -3,63 +3,62 @@ import Item from './Item.js';
 import '../../js/checkAuth.js';
 import '../../style/Menu.css';
 
-var api ='/api/menu-item/';
+var api = '/api/menu-item/';
 
 class Menu extends Component {
 
   constructor(props) {
     super(props);
 
-    this.state = {data: [
-      {
-        item_id : 1,
-        seq     : 1,
-        title   : "new name",
-        price   : 10,
-        descr   : "new description"
-      }
-    ]};
+    this.state = {
+      data: []
+    };
 
     this.removeItem = this.removeItem.bind(this);
     this.addItem = this.addItem.bind(this);
     this.editItem = this.editItem.bind(this);
   }
 
-  componentDidMount(){
-    let url ='/api/menu';
-    fetch(url, {credentials: 'same-origin' })
-          .then(response => response.json())
-          .then(json => {
-            json.sort((a,b)=>(a.seq - b.seq))
-            this.setState({data: json});
-          })
+  componentDidMount() {
+    let url = '/api/menu';
+    fetch(url, { credentials: 'same-origin' })
+      .then(response => response.json())
+      .then(json => {
+        if (0 < json.length) {
+          json.sort((a, b) => (a.seq - b.seq))
+          this.setState({ data: json });
+        } else if (json.length == 0) {
+          this.addItem(0);
+        }
+      });
   }
 
 
-  setMenu(menu){
+  setMenu(menu) {
     this.setState({
       data: this.responseText
     });
-  }descr
+  }
 
 
-  addItem(key){
+  addItem(key) {
 
     let menu = this.state.data;
     menu.forEach(element => {
-      if(element.seq > key){
+      console.log(element)
+      if (element.seq > key) {
         element.seq++
       }
     });
 
     let obj = {
-      item_id : menu.length,
-      seq     : key+1,
-      title   : "new name",
-      price   : 10,
-      descr   : "new description"
+      item_id: menu.length,
+      seq: key,
+      title: "new name",
+      price: 10,
+      descr: "new description"
     }
-    
+
     menu.splice(key + 1, 0, obj)
 
     this.setState({
@@ -70,18 +69,17 @@ class Menu extends Component {
     xhttp.open("POST", api, true);
     xhttp.setRequestHeader("Content-type", "application/json");
     xhttp.send(JSON.stringify(obj));
-
   }
 
 
-  editItem(key, field, newText){
+  editItem(key, field, newText) {
     let menu = this.state.data;
     let obj = menu[key];
 
     switch (field) {
       case "title":
         obj.title = newText;
-      break;
+        break;
 
       case "price":
         obj.price = newText;
@@ -106,23 +104,23 @@ class Menu extends Component {
   }
 
 
-  removeItem(key){
+  removeItem(key) {
     let menu = this.state.data;
 
     let obj = menu.find(function (element) {
-      return element.seq == key      
+      return element.seq == key
     })
 
     //delete object form client size
     let objIndex = menu.findIndex(function (element) {
-      return element.seq == key      
+      return element.seq == key
     })
     menu.splice(objIndex, 1);
 
     menu.forEach(element => {
-      if(element.seq > key){
+      if (element.seq > key) {
         element.seq--
-        }
+      }
     });
 
     this.setState({
@@ -139,21 +137,23 @@ class Menu extends Component {
   render() {
 
     const menu = this.state.data;
-    const menuItems = menu.map((item , index) =>
+    const menuItems = menu.map((item, index) =>
       <Item
-        key = {index}
-        index = {index}
-        title = {item.title}
-        price = {item.price}
-        descr = {item.descr}
-        edit = {this.editItem}
-        add = {this.addItem}
-        remove = {this.removeItem}/>
-      );
+        key={index}
+        index={index}
+        title={item.title}
+        price={item.price}
+        descr={item.descr}
+        edit={this.editItem}
+        add={this.addItem}
+        remove={this.removeItem} />
+    );
 
-    return(
-      <div className="Menu-Container">
-        {menuItems}
+    return (
+      <div>
+        <div className="Menu-Container">
+          {menuItems}
+        </div>
       </div>
     );
   }// end of render

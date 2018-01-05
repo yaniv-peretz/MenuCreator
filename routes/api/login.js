@@ -1,75 +1,49 @@
 const express = require('express');
 const con = require('../../config/mysqlCon.js');
 const router = express.Router();
-const session = require('express-session');
+var session = require('express-session');
+const sessionStore = require('connect-session-knex');
 
-
-
-
+app.set('trust proxy', 1) // trust first proxy
 app.use(session({
   secret: 'a',
   resave: false,
   saveUninitialized: true,
-}))
+  cookie: {
+    path: '/',
+    httpOnly: true,
+    secure: false,
+    maxAge: null
+  },
+  //TODO
+  // store: sessionStore,
+  proxy : true,
+}));
 
+/**
+ * Log In 
+ */
+router.post('/', (req, res) => {
+  let email = req.body.email;
+  let passowrd = req.body.passowrd;
+  let query = `SELECT id FROM Users
+                  WHERE email= '${email}' AND password='${passowrd}'`;
 
-router.post('/',approveUserPassword, function(req, res){
-
-  var refer = req.rawHeaders[15]
-  var port;
-
-  if(req.session.auth){
-    if(refer.includes('3000')){
-      port = 3000;
-
+  con.query(query, (err, result, fields) => {
+    if (err || result.length == 0) {
+      res.sendStatus(403)
     }else{
-      port = 8081;
-
+      req.session.auth = true;
+      req.session.rest_id = result[0].id;
+      res.sendStatus(200)
     }
-
-    let url = 'http://localhost:'+port+'/edit-menu';
-    res.redirect(url);
-
-  }else{
-    req.session.auth = false;
-    let url = '/';
-    res.redirect(url);
-
-  }
+  });
 });
 
 
-function approveUserPassword(req, res, next) {
-
-  let email = req.body.email;
-  let psw = req.body.psw;
-  let query = "SELECT id FROM Users "             +
-              "WHERE email= '" + email + "' AND " +
-              "password='" + psw + "'"            ;
-
-  con.query(query, function (err, result, fields) {
-    if (err) throw err;
-
-    if(result.length > 0){
-      req.session.auth = true;
-      req.session.rest_id = result[0].id;
-
-    }else{
-      req.session.auth = false;
-    }
-
-    next();
-  });
-}
-
-
-router.post('/out', function(req, res){
-  let url = '/';    
-  res.redirect(url);
-  req.session.auth = false;
-
-  });
-
+/**
+ * Create a New User
+   */
 router.post('/reg', (req, res) => {
   let email = req.body.email;
   let passowrd = req.body.passowrd;
@@ -77,57 +51,42 @@ router.post('/reg', (req, res) => {
 
   //inset new user
   sql = `INSERT INTO Users (email, password) 
-          VALUES ('${email}' , '${passowrd}');`;
-  con.query(sql, function (err, result, fields) {
-    if (err) throw err;
-  });
-
-  //inset first menu item
-  sql = `INSERT INTO Menu_Items
-        (rest_id, item_id, seq)
-          SELECT id, 0, 0
-          FROM Users
-          WHERE email='${email}' AND password='${passowrd}';`;
-  con.query(sql, function (err, result, fields) {
-    if (err) throw err;
-  });
-
-  //and set session data
-  let query = `SELECT id FROM Users
-              WHERE email= '${email}' AND password='${passowrd}';`;
-  con.query(query, function (err, result, fields) {
-    if (err) throw err;
-
-    req.session.auth = true;
-    req.session.rest_id = result[0].id;
-    console.log(req.sessionID)
-    console.log(`setting session rest_id:${req.session.rest_id} and ${req.session.auth}`);
-
-    res.sendStatus(200);
+    VALUES ('${email}' , '${passowrd}');`;
+  con.query(sql, (err, result, fields) => {
+    if (err) {
+      res.sendStatus(400)
+    } else {
+      res.sendStatus(200);
+    }
   });
 });
 
+/**
+ * Log out
+ */
+router.delete('/', (req, res) => {
+  req.session.rest_id = 0;
+  req.session.auth = false;
 
-router.get('/check', function(req, res){
-  if(req.session.auth){
+});
+
+router.get('/check', (req, res) => {
+  if (req.session.auth) {
     res.json(true);
 
-  }else{
+  } else {
     res.json(false);
   }
 });
 
 
 router.get('/rest_id', (req, res) => {
-  console.log(req.sessionID)
-  console.log(`req.session.auth:${req.session.auth}`)
-  if(req.session.auth){
-    res.json(req.session.rest_id);
+  if (req.session.auth) {
+    res.send(req.session.rest_id.toString());
 
-  }else{
-    res.json(0);
+  } else {
+    res.sendStatus(403);
   }
-
 });
 
 module.exports = router;

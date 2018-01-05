@@ -1,48 +1,82 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import { Redirect } from 'react-router-dom';
 
 class LoginBox extends Component {
-
-
-  loginAjax() {
-    var obj = this;
-
-    var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = () => {
-      console.log(`this.readyState:${xhttp.readyState} this.status:${xhttp.status}`)
-      if (xhttp.readyState == 4 && xhttp.status == 200) {
-        window.location = '/edit-menu';
-      } else if (this.readyState == 4) {
-        alert('user and password incorrect');
+  logInAsUser() {
+    //creating user promise
+    let user = new Promise((resolve, reject) => {
+      let url = 'api/login/'
+      let credentials = {
+        email: document.querySelector('#email').value,
+        passowrd: document.querySelector('#password').value
       }
-    };
+      if (credentials.email == undefined || credentials.passowrd == undefined) { return }
 
-    var credentials = {
-      email: document.querySelector('#email').value,
-      passowrd: document.querySelector('#password').value
-    }
+      const xhr = new XMLHttpRequest();
+      xhr.open("POST", url, true);
+      xhr.setRequestHeader("Content-type", "application/json");
+      xhr.onload = () => {
+        if (xhr.status == 200) {
+          resolve();
+        } else {
+          reject()
+        }
+      }
+      xhr.onerror = () => reject();
+      xhr.send(JSON.stringify(credentials));
 
-    if (credentials.email == undefined || credentials.passowrd == undefined) {
-      return;
-    }
+    });
 
-    var url = 'api/login/reg'
-    xhttp.open("POST", url, true);
-    xhttp.setRequestHeader("Content-type", "application/json");
-    xhttp.send(JSON.stringify(credentials));
+    user.then((status) => {
+      window.location = "/edit-menu"
+    }, (status) => {
+      alert(`cannot login`)
+    })
   }
-  render() {
 
+  registerNewUser() {
+    //creating user promise
+    let newUser = new Promise((resolve, reject) => {
+      let url = 'api/login/reg'
+      let credentials = {
+        email: document.querySelector('#email').value,
+        passowrd: document.querySelector('#password').value
+      }
+      if (credentials.email == undefined || credentials.passowrd == undefined) { return }
+
+      const xhr = new XMLHttpRequest();
+      xhr.open("POST", url, true);
+      xhr.setRequestHeader("Content-type", "application/json");
+      xhr.onload = () => {
+        if (xhr.status == 200) {
+          resolve();
+        } else {
+          reject()
+        }
+      }
+      xhr.onerror = () => reject();
+      xhr.send(JSON.stringify(credentials));
+
+    });
+
+    newUser.then((status) => {
+      alert("new user is created, please login!")
+    }, (status) => {
+      alert(`cannot create user and passowrd`)
+    })
+  }
+
+  render() {
     return (
       <div id="login">
         <div>
-          <div><span>Email:</span><input id="email" name="email" className="loginInput" /> </div>
-          <div><span>Password:</span><input id="password" name="password" type="password" className="loginInput" /> </div>
+          <div><span>Email:</span><input required id="email" name="email" className="loginInput" /> </div>
+          <div><span>Password:</span><input required id="password" name="password" type="password" className="loginInput" /> </div>
         </div>
         <div className="login-buttons">
-          <input id="login-sub" type="submit" value="Log In" />
-          <button onClick={() => this.loginAjax()}>Sign In</button>
+
+          <button onClick={() => this.logInAsUser()}> Log In </button>
+          <button onClick={() => this.registerNewUser()}> Sign In </button>
         </div>
       </div>
     );

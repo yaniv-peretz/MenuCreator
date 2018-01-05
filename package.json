@@ -7,16 +7,15 @@
     "start": "node app.js"
   },
   "dependencies": {
+    "connect-session-knex": "^1.4.0",
     "cookie-parser": "^1.4.3",
     "express": "*",
     "express-session": "^1.15.6",
-    "express": "*",
-    "express-session": "^1.15.6",
-    "cookie-parser": "^1.4.3",
-    "mysql": "^2.15.0"
+    "mysql": "^2.15.0",
+    "session-file-store": "^1.2.0"
   },
   "author": "Yaniv Peretz",
   "devDependencies": {},
   "description": "",
-  "repository":"g"
+  "repository": "g"
 }

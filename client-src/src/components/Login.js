@@ -6,11 +6,12 @@ import "../style/index.css"
 
 class Login extends Component {
   render() {
+    
     return (
       <div>
-        <Header />
+        <Header setRedirect={this.props.setRedirect}/>
         <LandingPage />
-        <img src={ require('../style/Resources/Demo.gif') } className="demo-pic"/>
+        <img src={require('../style/Resources/Demo.gif')} className="demo-pic" />
       </div>
     );
   }
