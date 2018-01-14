@@ -1,43 +1,39 @@
-import React, { Component } from 'react';
-import ItemContect from './ItemContect.js';
-import UserButtons from './UserButtons.js';
+import React, { Component } from "react";
+import ItemContect from "./ItemContect.js";
+import UserButtons from "./UserButtons.js";
 
-class Item extends Component {
+export default class Item extends Component {
   constructor(props) {
     super(props);
     this.state = {
       showUserButtons: false,
       editMode: false
     };
-    //this.state = {editMode: false};
-    this.changeEditMode = this.changeEditMode.bind(this);
+    this.toggleEditMode = this.toggleEditMode.bind(this);
   }
 
-  addItemHoverButtons(){
+  addItemHoverButtons() {
     let show = this.state.showUserButtons;
-    if(!show)
-      this.setState(previousState => {
-        return { showUserButtons: true };
-      });
+    if (!show) {
+      this.setState({ showUserButtons: true });
+    }
   }
 
-  removeItemHoverButtons(){
+  removeItemHoverButtons() {
     //remove input field
     this.setState({
-        editMode: false,
+      editMode: false
     });
 
     let show = this.state.showUserButtons;
-    if(show)
-      this.setState(previousState => {
-        return { showUserButtons: false };
-      });
+    if (show) {
+      this.setState({ showUserButtons: false });
+    }
   }
 
-  changeEditMode(){
-    this.setState(previousState => {
-      return { editMode: !previousState.editMode };
-    });
+  toggleEditMode() {
+    let next = this.state.editMode;
+    this.setState({ editMode: !next });
   }
 
   render() {
@@ -46,27 +42,29 @@ class Item extends Component {
       <div
         className="Menu-Item-Container"
         onMouseEnter={() => this.addItemHoverButtons()}
-        onMouseLeave={() => this.removeItemHoverButtons()}  >
-
+        onMouseLeave={() => this.removeItemHoverButtons()}
+      >
         <ItemContect
-          title     = {this.props.title}
-          descr     = {this.props.descr}
-          price     = {this.props.price}
-          editMode  = {this.state.editMode}
-          edit      = {this.props.edit}
-          index     = {this.props.index}  />
-
+          title={this.props.title}
+          item_id={this.props.item_id}
+          seq={this.props.seq}
+          descr={this.props.descr}
+          price={this.props.price}
+          editMode={this.state.editMode}
+          edit={this.props.edit}
+          index={this.props.index}
+        />
 
         <UserButtons
-          show    = {show}
-          edit  = {this.changeEditMode}
-          remove  = {this.props.remove}
-          add  = {this.props.add}
-          index = {this.props.index}  />
-
+          show={show}
+          // key={this.props.key}
+          index={this.props.index}
+          seq={this.props.seq}
+          toggleEditMode={this.toggleEditMode}
+          remove={this.props.remove}
+          add={this.props.add}
+        />
       </div>
     );
-  }// end of render
-
-}// end of Itme
-export default Item;
+  }
+}

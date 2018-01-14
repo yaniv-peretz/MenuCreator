@@ -1,162 +1,203 @@
-import React, { Component } from 'react';
-import Item from './Item.js';
-import '../../js/checkAuth.js';
-import '../../style/Menu.css';
-
-var api = '/api/menu-item/';
+import React, { Component } from "react";
+import swal from "sweetalert";
+import Item from "./Item.js";
+import "../../js/checkAuth.js";
+import "../../style/Menu.css";
 
 class Menu extends Component {
-
   constructor(props) {
     super(props);
-
     this.state = {
-      data: []
+      menu: []
     };
-
     this.removeItem = this.removeItem.bind(this);
     this.addItem = this.addItem.bind(this);
     this.editItem = this.editItem.bind(this);
   }
 
   componentDidMount() {
-    let url = '/api/menu';
-    fetch(url, { credentials: 'same-origin' })
+    const url = "/api/menu";
+    fetch(url, { credentials: "same-origin" })
       .then(response => response.json())
       .then(json => {
         if (0 < json.length) {
-          json.sort((a, b) => (a.seq - b.seq))
-          this.setState({ data: json });
-        } else if (json.length == 0) {
-          this.addItem(0);
+          json.sort((a, b) => a.seq - b.seq);
+          this.setState({ menu: json });
+        } else if (json.length === 0) {
+          this.initializeMenu();
         }
       });
   }
 
-
-  setMenu(menu) {
-    this.setState({
-      data: this.responseText
-    });
+  initializeMenu() {
+    //Only on empty, or first item insertion
+    this.addItem(-1);
   }
 
-
-  addItem(key) {
-
-    let menu = this.state.data;
-    menu.forEach(element => {
-      console.log(element)
-      if (element.seq > key) {
-        element.seq++
-      }
-    });
-
-    let obj = {
-      item_id: menu.length,
-      seq: key,
+  addItem(index) {
+    // adding item to state only if succesful on the server
+    let newItem = {
+      item_id: 0,
+      seq: index + 1,
       title: "new name",
       price: 10,
       descr: "new description"
-    }
+    };
 
-    menu.splice(key + 1, 0, obj)
-
-    this.setState({
-      data: menu
+    let addItemPromise = new Promise((resolve, reject) => {
+      let xhttp = new XMLHttpRequest();
+      const url = `/api/menu-item/`;
+      xhttp.open("POST", url, true);
+      xhttp.onload = () => {
+        if (xhttp.readyState === 4) {
+          if (xhttp.status === 200) {
+            resolve(xhttp.responseText);
+          } else {
+            reject(xhttp.status);
+          }
+        }
+      };
+      xhttp.setRequestHeader("Content-type", "application/json");
+      xhttp.send(JSON.stringify(newItem));
     });
 
-    var xhttp = new XMLHttpRequest();
-    xhttp.open("POST", api, true);
-    xhttp.setRequestHeader("Content-type", "application/json");
-    xhttp.send(JSON.stringify(obj));
+    let menu = this.state.menu;
+    addItemPromise.then(
+      response => {
+        newItem.item_id = response;
+        if (0 < menu.length) {
+          menu.forEach(item => {
+            if (item.seq >= newItem.seq) {
+              item.seq++;
+            }
+          });
+        }
+        menu.splice(newItem.seq, 0, newItem);
+        this.setState({ menu: menu });
+      },
+      () => {
+        swal("Adding New Item Faild", "", "fail");
+      }
+    );
   }
 
-
-  editItem(key, field, newText) {
-    let menu = this.state.data;
-    let obj = menu[key];
-
+  editItem(index, field, newVal) {
+    let menu = this.state.menu;
+    let editItem = menu[index];
     switch (field) {
       case "title":
-        obj.title = newText;
-        break;
-
+      editItem.title = newVal;
+      break;
       case "price":
-        obj.price = newText;
-        break;
-
+      editItem.price = newVal;
+      break;
       case "descr":
-        obj.descr = newText;
-        break;
-
+      editItem.descr = newVal;
+      break;
       default:
-
     }
-
-    this.setState({
-      data: menu
+    
+    let updatePromise = new Promise((resolve, fail)=>{
+      const url = `/api/menu-item/`;
+      let xhttp = new XMLHttpRequest();
+      xhttp.open("PUT", url, true);
+      xhttp.onload = ()=>{
+        if(xhttp.readyState === 4){
+          if(xhttp.status === 200){
+            resolve();
+          }else{
+            fail();
+          }
+        }
+      }
+      xhttp.setRequestHeader("Content-type", "application/json");
+      xhttp.send(JSON.stringify(editItem));
+      
     });
-
-    var xhttp = new XMLHttpRequest();
-    xhttp.open("PUT", api, true);
-    xhttp.setRequestHeader("Content-type", "application/json");
-    xhttp.send(JSON.stringify(obj));
+    
+    updatePromise.then(()=>{
+      menu[index] = editItem;
+      this.setState({
+        menu: menu
+      });
+    },()=>{
+      swal("Something Went Wrong!","updating item failed","fail");
+    })
   }
 
+  removeItem(id) {
+    if (!id || id < 1) {
+      return;
+    }
 
-  removeItem(key) {
-    let menu = this.state.data;
+    //try to delete menu item from DB
+    let deleteItemFromMenu = new Promise((resolve, reject) => {
+      const url = `/api/menu-item/${id}`;
+      const xhr = new XMLHttpRequest();
+      xhr.open("DELETE", url, true);
+      xhr.onload = () => {
+        let menu = this.state.menu;
+        let itemIndex = menu.findIndex(item => {
+          return item.item_id === id;
+        });
+        let itemToDelete = menu[itemIndex];
+        if (xhr.readyState === 4) {
+          if (xhr.status === 200) {
+            resolve(itemToDelete);
+          } else {
+            reject(itemToDelete);
+          }
+        }
+      };
+      xhr.send();
+    });
 
-    let obj = menu.find(function (element) {
-      return element.seq == key
-    })
-
-    //delete object form client size
-    let objIndex = menu.findIndex(function (element) {
-      return element.seq == key
-    })
-    menu.splice(objIndex, 1);
-
-    menu.forEach(element => {
-      if (element.seq > key) {
-        element.seq--
+    deleteItemFromMenu.then(
+      item => {
+        let menu = this.state.menu;
+        menu.map(menuItem => {
+          if (item.seq < menuItem.seq) {
+            menuItem.seq--;
+          }
+          return menuItem;
+        });
+        menu.splice(item.seq, 1);
+        this.setState({
+          menu: menu
+        });
+        swal(`${item.title} deleted!`);
+      },
+      item => {
+        swal(
+          "Item not Deleted",
+          `somthing went wrong with deleting ${item.title}!`,
+          "fail"
+        );
       }
-    });
-
-    this.setState({
-      data: menu
-    });
-
-    //delet object from DB
-    var xhttp = new XMLHttpRequest();
-    xhttp.open("DELETE", api, true);
-    xhttp.setRequestHeader("Content-type", "application/json");
-    xhttp.send(JSON.stringify(obj));
+    );
   }
 
   render() {
-
-    const menu = this.state.data;
-    const menuItems = menu.map((item, index) =>
+    const menu = this.state.menu;
+    const menuItems = menu.map((item, index) => (
       <Item
-        key={index}
+        key={item.item_id}
         index={index}
+        seq={item.seq}
         title={item.title}
         price={item.price}
         descr={item.descr}
         edit={this.editItem}
         add={this.addItem}
-        remove={this.removeItem} />
-    );
+        remove={this.removeItem}
+      />
+    ));
 
     return (
       <div>
-        <div className="Menu-Container">
-          {menuItems}
-        </div>
+        <div className="Menu-Container">{menuItems}</div>
       </div>
     );
-  }// end of render
-
-}// end of Itme
+  }
+}
 export default Menu;

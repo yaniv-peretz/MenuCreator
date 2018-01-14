@@ -1,147 +1,98 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const con = require('../../config/mysqlCon.js');
-const session = require('express-session');
+const con = require("../../config/mysqlCon.js");
+const session = require("express-session");
 var rest_id;
 
-function checkAuth(req, res, next) {
+function isAuthenticated(req, res, next) {
   if (!req.session.auth) {
-    res.json("no auth for menu-item");
+    res.sendStatus(403);
   }
-  rest_id = req.session.rest_id;
-  next()
-};
+  next();
+}
 
-router.get(':item_id', function(req, res){
-
+router.get(":item_id", (req, res) => {
   let item_id = req.params.item_id;
 
-  let sql = "SELECT FROM Menu_Items " +
-              "WHERE rest_id='" + rest_id + "' AND" +
-              "item_id='" + item_id + "'";
+  let sql = `SELECT FROM Menu_Items 
+      WHERE item_id=${item_id}`;
 
-  con.query(sql, function (err, result, fields) {
+  con.query(sql, function(err, result, fields) {
     if (err) {
       console.log(sql);
-    throw err;
+      throw err;
+    }
+  });
+});
+
+router.post("/", isAuthenticated, (req, res) => {
+  let newItem = req.body;
+  newItem.rest_id = req.session.rest_id;
+  let sql = new Promise((resolve, reject) => {
+    let sql = [
+      `UPDATE Menu_Items 
+        SET seq = seq + 1
+        WHERE rest_id=${newItem.rest_id}
+        AND seq>=${newItem.seq}`,
+
+      `INSERT INTO Menu_Items
+        VALUES (
+          0, ${newItem.rest_id}, ${newItem.seq}, 
+          '${newItem.title}', '${newItem.descr}', ${newItem.price}
+        )`
+    ];
+
+    for (let i = 0; i < sql.length; i++) {
+      con.query(sql[i], (err, result, fields) => {
+        if (err) {
+          console.log(sql[i]);
+          throw err;
+        }
+        if (i === 1) {
+          resolve(result.insertId);
+        }
+      });
     }
   });
 
+  sql.then(
+    newId => {
+      res.json(newId);
+    },
+    () => {
+      res.sendStatus(400);
+    }
+  );
 });
 
+router.put("/", isAuthenticated, function(req, res) {
+  const editItem = req.body;
+  let query = `UPDATE Menu_Items 
+      SET seq=${editItem.seq}, title='${editItem.title}',
+       descr='${editItem.descr}', price=${editItem.price} 
+      WHERE (rest_id=${req.session.rest_id} AND item_id=${editItem.item_id})`;
 
-router.post('/', checkAuth, function(req, res){
-
-  let item_id = req.body.item_id;
-  let seq     = req.body.seq;
-  let title   = req.body.title;
-  let descr    = req.body.descr;
-  let price   = req.body.price;
-
-  let sql = [
-    "UPDATE Menu_Items "              +
-    "set seq = seq + 1 "              +
-    "WHERE "                          +
-      "rest_id="     + rest_id + " "  +     
-      "AND seq >= " + seq 
-    ,
-
-    "INSERT INTO Menu_Items " +
-      "VALUES ("              +
-        rest_id + ","         +
-        item_id + ","         +
-        seq     + ","         +
-        "'" + title + "',"    +
-        "'" + descr + "',"    +
-        price                 +
-        ");"
-  ]
-  
-  for (let i = 0; i < sql.length; i++) {
-    con.query(sql[i], function (err, result, fields) {
-      if (err) {
-        console.log(sql[i]);
-        throw err;
-      }
-    });
-  }
-  res.json("");
-
-});
-
-
-router.put('/', checkAuth, function(req, res){
-  let item_id = req.body.item_id;
-  let seq     = req.body.seq;
-  let title   = req.body.title;
-  let descr    = req.body.descr;
-  let price   = req.body.price;
-
-  let query = "UPDATE Menu_Items "          +
-              "SET "                        +
-                "seq="    + seq   + ", "    +
-                "title='" + title + "', "   +
-                "descr='" + descr + "', "   +
-                "price="  + price + " "     +
-              "WHERE ("                     +
-                "rest_id=" + rest_id + " "  +
-                "AND item_id=" + item_id    +
-              ");";
-
-  con.query(query, function (err, result, fields) {
+  con.query(query, function(err, result, fields) {
     if (err) {
       console.log(query);
       throw err;
-
-    }else{
-      res.json("");
-
+    } else {
+      res.sendStatus(200);
     }
   });
-
 });
 
+router.delete("/:id", function(req, res) {
+  let id = req.params.id;
+  let sql = `DELETE FROM Menu_Items WHERE item_id= ${id}`;
 
-router.delete('/', checkAuth, function(req, res){
-
-  let item_id = req.body.item_id;
-  let seq = req.body.seq;
-  let sql = [
-    "DELETE FROM Menu_Items "         +
-    "WHERE "                          +
-      "rest_id="     + rest_id + " "  +
-      "AND item_id=" + item_id + ";"
-
-    ,
-
-    "UPDATE Menu_Items "              +
-    "SET item_id  = item_id -1 "      +
-    "WHERE "                          +
-      "rest_id="     + rest_id + " "  +     
-      "AND item_id > "+ item_id
-
-    ,
-
-    "UPDATE Menu_Items "              +
-    "SET seq  = seq -1 "              +
-    "WHERE "                          +
-      "rest_id="     + rest_id + " "  +     
-      "AND seq > " + seq 
-
-  ]
-                
-  for (let i = 0; i < sql.length; i++) {
-    con.query(sql[i], function (err, result, fields) {
-      if (err) {
-        console.log(sql[i]);
-        throw err;
-      }
-    });  
-  }
-
-  res.json("menu-item-delete-ok");
-
+  con.query(sql, (err, result, fields) => {
+    if (err) {
+      console.log(sql);
+      throw err;
+    }
+  });
+  res.sendStatus(200);
 });
-
 
 module.exports = router;

@@ -1,100 +1,120 @@
-import React, { Component } from 'react';
-import { BrowserRouter as Router, Route } from 'react-router-dom'
-import '../../style/menuTitle.css'
+import React, { Component } from "react";
+import { swal } from "sweetalert";
 
 class MenuTitle extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      edit: this.props.edit,
+      id: "",
       resturantName: "",
-      viewUrl: ""
-    }
+      viewUrl: "/view-menu/"
+    };
   }
 
   componentDidMount() {
-    var id = "";
-    var currentUrl = document.location.toString();
-    let view = currentUrl.includes('view-menu');
-    if(view){
-      var id = document.location.toString().indexOf('u/')
-      id = currentUrl.substring(id + 2);
+    this.getResturantName();
+    if (this.state.edit) {
+      this.getviewUrl();
     }
-
-    if(!view){
-      this.loadLink();
-    }
-    this.loadTitle(id);
-
   }
 
-  loadTitle(id) {
-    let restName = new Promise((resolve, reject) => {
-      let url = `/api/rest-name/${id}`;
-      console.log(url)
+  getResturantName() {
+    let url = `/api/rest-name/`;
+    if (!this.state.edit) {
+      let id = document.location.toString().substring(32);
+      url += id;
+    }
+
+    const restName = new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();
       xhr.open("GET", url, true);
       xhr.onload = () => {
-        if (xhr.status == 200) {
-          resolve(xhr.responseText);
-        } else {
-          reject()
+        if (xhr.readyState === 4) {
+          if (xhr.status === 200) {
+            resolve(xhr.responseText);
+          } else {
+            reject();
+          }
         }
-      }
-      xhr.onerror = () => {reject() };
+      };
+      xhr.onerror = () => {
+        reject();
+      };
       xhr.send();
     });
 
     var menu = this;
-    restName.then((responseText) => {
-      menu.setState({ resturantName: responseText })
-    }, (status) => {
-      alert(`cannot get rest name`)
-    })
+    restName.then(
+      restName => {
+        menu.setState({ resturantName: restName });
+      },
+      () => {
+        swal(
+          "Getting resturant name failed",
+          "cannot set resurant name",
+          "fail"
+        );
+      }
+    );
   }
 
-  loadLink() {    
-    let rest_id = new Promise((resolve, reject) => {
-      let url = `/api/login/rest_id/`;
+  getviewUrl() {
+    const id = document.location.toString().substring(32);
+    const url = `/api/login/rest_id/${id}`;
+
+    const restId = new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();
       xhr.open("GET", url, true);
       xhr.onload = () => {
-        if (xhr.status == 200) {
-          resolve(xhr.responseText);
-        } else {
-          reject()
+        if (xhr.readyState === 4) {
+          if (xhr.status === 200) {
+            resolve(xhr.responseText);
+          } else {
+            reject();
+          }
         }
-      }
-      xhr.onerror = () => {reject() };
+      };
+      xhr.onerror = () => {
+        reject();
+      };
       xhr.send();
     });
 
-    var menu = this;
-    rest_id.then((id)=>{
-      menu.setState({viewUrl: `/view-menu/${id}`});
-      // this.setState({viewUrl: `www.google.com`});
-    },()=>{
-      alert('cannot set view url');
-    });
+    const menu = this;
+    restId.then(
+      restId => {
+        menu.setState({
+          id: restId,
+          viewUrl: `/view-menu/${restId}`
+        });
+      },
+      () => {
+        swal("Getting resturant id failed", "cannot set view url", "fail");
+      }
+    );
   }
 
   render() {
-
-        return(
-      <div className = "rest-title" >
-            <h1>{this.state.resturantName}</h1>
-            <Router>
-              <Route exact path='/edit-menu' render={() => (
-                <div className="title-edit-items">
-                  <h3>edit your menu</h3>
-                  <p>you can view the menu at <a href={this.state.viewUrl} target="_blank">Link</a></p>
-                </div>
-
-              )} />
-            </Router>
-
-      </div >
+    var viewMenuMsg = <p />;
+    if (this.state.edit) {
+      viewMenuMsg = (
+        <p>
+          View you'r created menu at this
+          <a href={this.state.viewUrl} target="_blank">
+            {" "}
+            Link{" "}
+          </a>
+          !
+        </p>
+      );
+    }
+    return (
+      <div className="rest-header">
+        <h1 className="rest-title">{this.state.resturantName}</h1>
+        {viewMenuMsg}
+      </div>
     );
-  }// end of render
-
-}// end of MenuTitle
+  } // end of render
+} // end of MenuTitle
 export default MenuTitle;

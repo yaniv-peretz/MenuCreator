@@ -1,21 +1,19 @@
-
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const con = require('../../config/mysqlCon.js');
-const session = require('express-session');
+const con = require("../../config/mysqlCon.js");
+const session = require("express-session");
 
 /**
  * Set resturant name for logged in edit menu
  */
-router.get('/', (req, res) => {
-  
+router.get("/", (req, res, next) => {
   let id = req.session.rest_id;
-  let sql = `SELECT rest_name FROM Users WHERE id=${id}`;  
+  let sql = `SELECT rest_name FROM Users WHERE id=${id}`;
 
   con.query(sql, (err, result, fields) => {
     if (err || result[0].rest_name == undefined) {
-      res.sendStatus(400);
-    }else{
+      res.sendStatus(204);
+    } else {
       res.send(result[0].rest_name);
     }
   });
@@ -24,27 +22,25 @@ router.get('/', (req, res) => {
 /**
  * Get Resurant name by Id
  */
-router.get('/:id', (req, res) => {
-  let sql = `SELECT rest_name FROM Users WHERE id=${req.params.id}`;  
+router.get("/:id", (req, res) => {
+  let sql = `SELECT rest_name FROM Users WHERE id=${req.params.id}`;
   con.query(sql, (err, result, fields) => {
     if (err || result[0].rest_name == undefined) {
-      res.sendStatus(400);
-    }else{
+      res.sendStatus(204);
+    } else {
       res.send(result[0].rest_name);
     }
   });
 });
 
-// function checkAuth(req, res, next) {
-//   if (!req.session.auth) {
-//     res.json("no auth for title");
-    
-//   }else{
-//     next()
-
-//   }
-
-// };
+var isLoggedIn = (req, res, next) => {
+  // if (!req.session.auth) {
+  //   res.sendStatus(403);
+  // } else {
+  //   next();
+  // }
+  next();
+};
 
 // router.get('/', checkAuth, function (req, res) {
 
@@ -61,14 +57,12 @@ router.get('/:id', (req, res) => {
 
 // });
 
-
 // router.post('/', checkAuth, function (req, res) {
 //   let rest_name = req.body.rest_name;
 //   let query =
 //     "UPDATE `Users` " +
 //     "SET `rest_name`='" + rest_name + "' " +
 //     "WHERE `id`=" + rest_id + ";";
-
 
 //   con.query(query, function (err, result, fields) {
 //     if (err) {
@@ -78,7 +72,6 @@ router.get('/:id', (req, res) => {
 //   });
 //   res.json();
 // });
-
 
 // router.put('/', checkAuth, function (req, res) {
 //   let rest_name = req.body.rest_name;
@@ -87,7 +80,6 @@ router.get('/:id', (req, res) => {
 //     "SET `rest_name`='" + rest_name + "' " +
 //     "WHERE `id`=" + rest_id + ";";
 
-
 //   con.query(query, function (err, result, fields) {
 //     if (err) {
 //       console.log(query);
@@ -96,7 +88,6 @@ router.get('/:id', (req, res) => {
 //   });
 //   res.json();
 // });
-
 
 // router.delete('/', checkAuth, function (req, res) {
 //   let query =
@@ -104,7 +95,6 @@ router.get('/:id', (req, res) => {
 //     "SET `rest_name`='Resturant New Name' " +
 //     "WHERE `id`=" + rest_id + ";";
 
-
 //   con.query(query, function (err, result, fields) {
 //     if (err) {
 //       console.log(query);
@@ -113,6 +103,5 @@ router.get('/:id', (req, res) => {
 //   });
 //   res.json();
 // });
-
 
 module.exports = router;

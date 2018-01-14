@@ -1,9 +1,15 @@
-/node_modules
-npm-debug.log
-/public (copy)
-/client-src/node_modules
-/client-src/registerServiceWorker.js
+#General
 github
 github.pub
 yarn-error.log
+####
 
+#Node js
+/sessions
+/node_modules
+npm-debug.log
+####
+
+#React
+/client-src/node_modules
+####

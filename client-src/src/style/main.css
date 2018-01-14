@@ -1,0 +1,45 @@
+/*  ############
+        Nav bar  
+    ############ */
+
+.header-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+
+/*  ####################
+        Landing Page    
+    #################### */
+
+.landing-message {
+    max-width: 100%;
+    text-align: center;
+    border: 3px solid black;
+    margin: auto;
+    margin-top: 15px;
+    padding: 20px;
+    width: 600px;
+}
+
+.landing-picture {
+    display: block;
+    margin: auto;
+    margin-top: 10px;
+    max-width: 100%;
+}
+
+
+/*  ####################
+        Menu Page    
+    #################### */
+
+.rest-header {
+    text-align: center;
+}
+
+.rest-title {
+    text-transform: capitalize;
+}

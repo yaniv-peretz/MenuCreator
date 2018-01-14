@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import Header from './Header/Header.js';
-import Menu  from './Menu/Menu-Viewer.js';
-import MenuTitle from './MenuTitle/MenuTitle.js';
+import Header from '../Header/Header.js';
+import Menu  from '../Menu/Menu-Viewer.js';
+import MenuTitle from '../MenuTitle/MenuTitle.js';
 
 
 class ViewMenu extends Component {
@@ -9,7 +9,7 @@ class ViewMenu extends Component {
     return (
       <div >
         <Header />
-        <MenuTitle />
+        <MenuTitle edit={false}/>
         <Menu />
     </div>
     );

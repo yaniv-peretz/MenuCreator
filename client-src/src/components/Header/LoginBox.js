@@ -1,84 +1,160 @@
-import React, { Component } from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import React, { Component } from "react";
+import swal from "sweetalert";
 
 class LoginBox extends Component {
-  logInAsUser() {
-    //creating user promise
-    let user = new Promise((resolve, reject) => {
-      let url = 'api/login/'
-      let credentials = {
-        email: document.querySelector('#email').value,
-        passowrd: document.querySelector('#password').value
-      }
-      if (credentials.email == undefined || credentials.passowrd == undefined) { return }
+  constructor(props) {
+    super(props);
+    this.state = {
+      usr: "",
+      psw: ""
+    };
 
-      const xhr = new XMLHttpRequest();
-      xhr.open("POST", url, true);
-      xhr.setRequestHeader("Content-type", "application/json");
-      xhr.onload = () => {
-        if (xhr.status == 200) {
-          resolve();
-        } else {
-          reject()
-        }
-      }
-      xhr.onerror = () => reject();
-      xhr.send(JSON.stringify(credentials));
-
-    });
-
-    user.then((status) => {
-      window.location = "/edit-menu"
-    }, (status) => {
-      alert(`cannot login`)
-    })
+    this.handleChangeUsr = this.handleChangeUsr.bind(this);
+    this.handleChangePsw = this.handleChangePsw.bind(this);
   }
 
-  registerNewUser() {
-    //creating user promise
-    let newUser = new Promise((resolve, reject) => {
-      let url = 'api/login/reg'
-      let credentials = {
-        email: document.querySelector('#email').value,
-        passowrd: document.querySelector('#password').value
-      }
-      if (credentials.email == undefined || credentials.passowrd == undefined) { return }
+  handleChangeUsr(event) {
+    this.setState({ usr: event.target.value });
+  }
 
+  handleChangePsw(event) {
+    this.setState({ psw: event.target.value });
+  }
+
+  login() {
+    if (!this.validateForm()) {
+      return;
+    }
+
+    const credentials = {
+      email: this.state.usr,
+      passowrd: this.state.psw
+    };
+    // login
+    const login = new Promise((resolve, reject) => {
+      const url = "api/login/";
       const xhr = new XMLHttpRequest();
       xhr.open("POST", url, true);
       xhr.setRequestHeader("Content-type", "application/json");
       xhr.onload = () => {
-        if (xhr.status == 200) {
+        if (xhr.status === 200) {
           resolve();
         } else {
-          reject()
+          reject();
         }
-      }
+      };
       xhr.onerror = () => reject();
       xhr.send(JSON.stringify(credentials));
-
     });
 
-    newUser.then((status) => {
-      alert("new user is created, please login!")
-    }, (status) => {
-      alert(`cannot create user and passowrd`)
-    })
+    login.then(
+      response => {
+        window.location = "/edit-menu";
+      },
+      response => {
+        swal(
+          "Cannot Login!",
+          "user and passowrd combination not exists",
+          "error"
+        );
+      }
+    );
+  }
+
+  createNewUser() {
+    if (!this.validateForm()) {
+      return;
+    }
+
+    // create new user
+    const credentials = {
+      email: this.state.usr,
+      passowrd: this.state.psw
+    };
+    const newUser = new Promise((resolve, reject) => {
+      const url = "api/login/reg";
+      let xhr = new XMLHttpRequest();
+      xhr.open("POST", url, true);
+      xhr.setRequestHeader("Content-type", "application/json");
+      xhr.onload = () => {
+        if (xhr.status === 200) {
+          resolve(credentials);
+        } else {
+          reject(credentials);
+        }
+      };
+      xhr.onerror = () => reject();
+      xhr.send(JSON.stringify(credentials));
+    });
+
+    newUser.then(
+      response => {
+        swal(
+          "New User Created!",
+          `new user ${credentials.email} was created successfully.`,
+          "success"
+        );
+      },
+      response => {
+        swal(
+          "User Not Created!",
+          `probably user name already exists for: ${
+            credentials.email
+          } try a diffrent user name.`,
+          "error"
+        );
+      }
+    );
+  }
+
+  validateForm() {
+    if (this.state.usr === "" || this.state.psw === "") {
+      swal("Missing username or password", ``, "info");
+      return false;
+    } else {
+      return true;
+    }
   }
 
   render() {
     return (
-      <div id="login">
-        <div>
-          <div><span>Email:</span><input required id="email" name="email" className="loginInput" /> </div>
-          <div><span>Password:</span><input required id="password" name="password" type="password" className="loginInput" /> </div>
+      <form className="form-inline my-2 my-lg-0">
+        <div className="input-group mb-3">
+          <input
+            required
+            className="form-control mr-sm-2"
+            id="email"
+            name="email"
+            placeholder="user name"
+            value={this.state.usr}
+            onChange={this.handleChangeUsr}
+          />
+          <input
+            required
+            className="form-control"
+            id="password"
+            name="password"
+            type="password"
+            placeholder="password"
+            value={this.state.psw}
+            onChange={this.handleChangePsw}
+          />
+          <button
+            type="button"
+            className="btn btn-outline-primary bg-light"
+            onClick={() => this.login()}
+          >
+            Log in
+          </button>
+          <button
+            type="button"
+            className="btn btn-outline-secondary bg-light"
+            onClick={() => this.createNewUser()}
+          >
+            Sign In
+          </button>
         </div>
-        <div className="login-buttons">
-
-          <button onClick={() => this.logInAsUser()}> Log In </button>
-          <button onClick={() => this.registerNewUser()}> Sign In </button>
-        </div>
-      </div>
+      </form>
     );
   }
 }

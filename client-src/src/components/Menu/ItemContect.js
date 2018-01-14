@@ -1,60 +1,69 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 
 class ItemContect extends Component {
-  render(){
-    let title = this.props.title;
-    let price = this.props.price;
-    let descr = this.props.descr;
+  constructor(props) {
+    super(props);
+    this.state = {
+      title: this.props.title,
+      price: this.props.price,
+      descr: this.props.descr
+    };
+    this.changeTitle = this.changeTitle.bind(this);
+    this.changePrice = this.changePrice.bind(this);
+    this.changeDescr = this.changeDescr.bind(this);
+  }
 
-    if(this.props.editMode){
-      let itemName  = title + this.props.index;
-      let itemPrice = price + this.props.index;
-      let itemDescr = descr + this.props.index;
+  changeTitle(event) {
+    this.setState({ title: event.target.value });
+    this.props.edit(this.props.index, "title", event.target.value);
+  }
 
-      return(
-        <div
-          className="Item-Name">
+  changePrice(event) {
+    this.setState({ price: event.target.value });
+    this.props.edit(this.props.index, "price", event.target.value);
+  }
+
+  changeDescr(event) {
+    this.setState({ descr: event.target.value });
+    this.props.edit(this.props.index, "descr", event.target.value);
+  }
+
+  render() {
+    let price = this.state.price;
+    let descr = this.state.descr;
+
+    if (this.props.editMode) {
+      return (
+        <div className="Item-Name">
           <input
             type="text"
-            id={"item-title" + this.props.index}
-            value={this.props.title}
-            onChange={() => this.props.edit(
-              this.props.index,
-              "title",
-              document.querySelector("#item-title" + this.props.index).value)}
-              />
+            value={this.state.title}
+            onChange={this.changeTitle}
+          />
 
           <input
             type="number"
-            id={"item-price" + this.props.index}
-            value={this.props.price}
-            onChange={() => this.props.edit(
-              this.props.index,
-              "price",
-              document.querySelector("#item-price" + this.props.index).value)}
-            />
+            value={this.state.price}
+            onChange={this.changePrice}
+          />
 
           <input
             type="text"
-            id={"item-descr" + this.props.index}
             value={this.props.descr}
-            onChange={() => this.props.edit(
-              this.props.index,
-              "descr",
-              document.querySelector("#item-descr" + this.props.index).value)}
-            />
+            onChange={this.changeDescr}
+          />
         </div>
-
-      )
-    }else{
-      return(
+      );
+    } else {
+      return (
         <div className="Item">
-          <div className="item-title"><div>{this.props.title}</div>
-          <div>{price}</div></div>
+          <div className="item-title">
+            <div>{this.state.title}</div>
+            <div>{price}</div>
+          </div>
           <div className="item-descr">{descr}</div>
         </div>
-      )
-
+      );
     }
   }
 }
