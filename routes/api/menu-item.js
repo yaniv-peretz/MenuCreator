@@ -45,12 +45,6 @@ router.post("/", isAuthenticated, (req, res) => {
     for (let i = 0; i < sql.length; i++) {
       con.query(sql[i], (err, result, fields) => {
         if (err) {
-
-          console.log("--------------------");
-          console.log("--------------------");
-          console.log(i);
-          console.log("--------------------");
-
           console.log(sql[i]);
           throw err;
         }

@@ -15,7 +15,7 @@ class MenuTitle extends Component {
   componentDidMount() {
     this.getResturantName();
     if (this.state.edit) {
-      this.getviewUrl();
+      this.setviewUrl();
     }
   }
 
@@ -60,10 +60,8 @@ class MenuTitle extends Component {
     );
   }
 
-  getviewUrl() {
-    const id = document.location.toString().substring(32);
-    const url = `/api/login/rest_id/${id}`;
-
+  setviewUrl() {
+    const url = `/api/login/rest_id/`;
     const restId = new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();
       xhr.open("GET", url, true);
