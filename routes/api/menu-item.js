@@ -17,7 +17,7 @@ router.get(":item_id", (req, res) => {
   let sql = `SELECT FROM Menu_Items 
       WHERE item_id=${item_id}`;
 
-  con.query(sql, function(err, result, fields) {
+  con.query(sql, function (err, result, fields) {
     if (err) {
       console.log(sql);
       throw err;
@@ -65,14 +65,14 @@ router.post("/", isAuthenticated, (req, res) => {
   );
 });
 
-router.put("/", isAuthenticated, function(req, res) {
+router.put("/", isAuthenticated, function (req, res) {
   const editItem = req.body;
   let query = `UPDATE Menu_Items 
       SET seq=${editItem.seq}, title='${editItem.title}',
        descr='${editItem.descr}', price=${editItem.price} 
       WHERE (rest_id=${req.session.rest_id} AND item_id=${editItem.item_id})`;
 
-  con.query(query, function(err, result, fields) {
+  con.query(query, function (err, result, fields) {
     if (err) {
       console.log(query);
       throw err;
@@ -82,17 +82,60 @@ router.put("/", isAuthenticated, function(req, res) {
   });
 });
 
-router.delete("/:id", function(req, res) {
-  let id = req.params.id;
-  let sql = `DELETE FROM Menu_Items WHERE item_id= ${id}`;
+router.delete("/:id", (req, res) => {
+  const id = req.params.id;
+  const rest_id = req.session.rest_id;
 
-  con.query(sql, (err, result, fields) => {
-    if (err) {
-      console.log(sql);
-      throw err;
-    }
+  let promiseTogetItemSequence = new Promise((resolve, reject) => {
+    const sql = `SELECT seq FROM Menu_Items WHERE rest_id=${rest_id} AND item_id=${id}`;
+    con.query(sql, (err, result, fields) => {
+      if (err) {
+        console.error(sql);
+      } else {
+        resolve(result[0].seq);
+      }
+    });
   });
-  res.sendStatus(200);
+
+  let promiseToUpdateSequence = (seq) => {
+    return new Promise((resolve, reject) => {
+      const sql = `UPDATE Menu_Items SET seq = seq - 1 WHERE rest_id=${rest_id} AND seq > ${seq}`;
+      con.query(sql, (err, result, fields) => {
+        if (err) {
+          console.error(sql);
+        } else {
+          resolve();
+        }
+      });
+    });
+  }
+
+
+  let promiseToDeleteId = new Promise((resolve, reject) => {
+    const sql = `DELETE FROM Menu_Items WHERE item_id=${id} AND rest_id=${rest_id}`;
+    con.query(sql, (err, result, fields) => {
+      if (err) {
+        console.error(sql);
+      } else {
+        resolve();
+      }
+    });
+  });
+
+  promiseTogetItemSequence
+    .then((seq) => {
+      return promiseToUpdateSequence(seq);
+    }).then(() => {
+      return promiseToDeleteId;
+    }).then(() => {
+      res.sendStatus(200);
+    })
+    .catch((err) => {
+      console.log(err);
+      throw (err)
+      console.log("falied for some reason");
+    });
+
 });
 
 module.exports = router;

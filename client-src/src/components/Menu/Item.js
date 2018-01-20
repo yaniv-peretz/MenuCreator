@@ -57,7 +57,7 @@ export default class Item extends Component {
 
         <UserButtons
           show={show}
-          // key={this.props.key}
+          id={this.props.id}
           index={this.props.index}
           seq={this.props.seq}
           toggleEditMode={this.toggleEditMode}

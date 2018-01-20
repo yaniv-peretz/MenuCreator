@@ -18,7 +18,7 @@ class UserButtons extends Component {
           <button
             type="button"
             className="remove-button"
-            onClick={() => this.props.remove(this.props.key, this.props.index)}
+            onClick={() => this.props.remove(this.props.id, this.props.index)}
           />
         </div>
       );

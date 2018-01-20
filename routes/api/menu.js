@@ -10,11 +10,11 @@ function checkAuth(req, res, next) {
   }
 }
 
-router.get("/", checkAuth, function(req, res) {
+router.get("/", checkAuth, (req, res) => {
   let sql =
     "SELECT * FROM Menu_Items " + "WHERE rest_id=" + req.session.rest_id + ";";
 
-  con.query(sql, function(err, result, fields) {
+  con.query(sql, (err, result, fields) => {
     if (err) {
       console.log(sql);
       throw err;
@@ -24,13 +24,13 @@ router.get("/", checkAuth, function(req, res) {
   });
 });
 
-router.get("/view-menu/:rest_id", function(req, res) {
-  let rest_id = req.params.rest_id;
-  let sql = "SELECT * FROM Menu_Items " + "WHERE rest_id=" + rest_id + ";";
+router.get("/view/:rest_id", (req, res) => {
+  const rest_id = req.params.rest_id;
+  const sql = `SELECT * FROM Menu_Items WHERE rest_id=${rest_id}`;
 
-  con.query(sql, function(err, result, fields) {
+  con.query(sql, (err, result, fields) => {
     if (err) {
-      console.log(sql);
+      console.error(sql);
       throw err;
     }
 

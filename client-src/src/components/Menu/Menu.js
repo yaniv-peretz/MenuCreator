@@ -86,91 +86,86 @@ class Menu extends Component {
     let editItem = menu[index];
     switch (field) {
       case "title":
-      editItem.title = newVal;
-      break;
+        editItem.title = newVal;
+        break;
       case "price":
-      editItem.price = newVal;
-      break;
+        editItem.price = newVal;
+        break;
       case "descr":
-      editItem.descr = newVal;
-      break;
+        editItem.descr = newVal;
+        break;
       default:
     }
-    
-    let updatePromise = new Promise((resolve, fail)=>{
+
+    let updatePromise = new Promise(resolve => {
       const url = `/api/menu-item/`;
       let xhttp = new XMLHttpRequest();
       xhttp.open("PUT", url, true);
-      xhttp.onload = ()=>{
-        if(xhttp.readyState === 4){
-          if(xhttp.status === 200){
+      xhttp.onload = () => {
+        if (xhttp.readyState === 4) {
+          if (xhttp.status === 200) {
             resolve();
-          }else{
-            fail();
           }
         }
       }
       xhttp.setRequestHeader("Content-type", "application/json");
       xhttp.send(JSON.stringify(editItem));
-      
+
     });
-    
-    updatePromise.then(()=>{
+
+    updatePromise.then(() => {
       menu[index] = editItem;
       this.setState({
         menu: menu
       });
-    },()=>{
-      swal("Something Went Wrong!","updating item failed","fail");
+    }, () => {
+      swal("Something Went Wrong!", "updating item failed", "fail");
     })
   }
 
-  removeItem(id) {
+  removeItem(id, index) {
     if (!id || id < 1) {
       return;
     }
 
     //try to delete menu item from DB
-    let deleteItemFromMenu = new Promise((resolve, reject) => {
+    let promiseToDeleteFromMenu = new Promise((resolve, reject) => {
       const url = `/api/menu-item/${id}`;
-      const xhr = new XMLHttpRequest();
+      let xhr = new XMLHttpRequest();
       xhr.open("DELETE", url, true);
       xhr.onload = () => {
-        let menu = this.state.menu;
-        let itemIndex = menu.findIndex(item => {
-          return item.item_id === id;
-        });
-        let itemToDelete = menu[itemIndex];
         if (xhr.readyState === 4) {
+          console.log(xhr.readyState + xhr.status);
+          
           if (xhr.status === 200) {
-            resolve(itemToDelete);
+            resolve(index);
           } else {
-            reject(itemToDelete);
+            reject(id);
           }
         }
       };
       xhr.send();
     });
 
-    deleteItemFromMenu.then(
-      item => {
+    promiseToDeleteFromMenu.then(
+      (index) => {
         let menu = this.state.menu;
+        const deletedSeq = menu[index];
+        menu.splice(index, 1);
         menu.map(menuItem => {
-          if (item.seq < menuItem.seq) {
+          if (deletedSeq < menuItem.seq) {
             menuItem.seq--;
           }
           return menuItem;
         });
-        menu.splice(item.seq, 1);
+
         this.setState({
           menu: menu
         });
-        swal(`${item.title} deleted!`);
-      },
-      item => {
+      }, id => {
         swal(
           "Item not Deleted",
-          `somthing went wrong with deleting ${item.title}!`,
+          `somthing went wrong with deleting item id:${id}!`,
           "fail"
         );
       }
@@ -181,6 +176,7 @@ class Menu extends Component {
     const menu = this.state.menu;
     const menuItems = menu.map((item, index) => (
       <Item
+        id={item.item_id}
         key={item.item_id}
         index={index}
         seq={item.seq}
