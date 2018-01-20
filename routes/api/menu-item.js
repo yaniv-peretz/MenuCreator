@@ -33,8 +33,8 @@ router.post("/", isAuthenticated, (req, res) => {
       `UPDATE Menu_Items 
         SET seq = seq + 1
         WHERE rest_id=${newItem.rest_id}
-        AND seq>=${newItem.seq}`,
-
+        AND seq>=${newItem.seq}`
+      ,
       `INSERT INTO Menu_Items
         VALUES (
           0, ${newItem.rest_id}, ${newItem.seq}, 
@@ -45,6 +45,12 @@ router.post("/", isAuthenticated, (req, res) => {
     for (let i = 0; i < sql.length; i++) {
       con.query(sql[i], (err, result, fields) => {
         if (err) {
+
+          console.log("--------------------");
+          console.log("--------------------");
+          console.log(i);
+          console.log("--------------------");
+
           console.log(sql[i]);
           throw err;
         }

@@ -11,17 +11,13 @@ function checkAuth(req, res, next) {
 }
 
 router.get("/", checkAuth, (req, res) => {
-  let sql =
-    `SELECT * FROM Menu_Items WHERE rest_id=${req.session.rest_id}`;
-
-    console.log(sql);
-    
+  let sql = `SELECT * FROM Menu_Items WHERE rest_id=${req.session.rest_id}`;
   con.query(sql, (err, result, fields) => {
     if (err) {
       console.log(sql);
       throw err;
     }
-    
+
     res.json(result);
   });
 });
@@ -35,7 +31,7 @@ router.get("/view/:rest_id", (req, res) => {
       console.error(sql);
       throw err;
     }
-    
+
     res.json(result);
   });
 });
