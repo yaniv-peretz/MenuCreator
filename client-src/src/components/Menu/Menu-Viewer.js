@@ -18,8 +18,10 @@ class Menu extends Component {
 
 
   loadData() {
-    const rest_id = window.location.pathname.substring(11);
-    const url = `/api/menu/view/${rest_id}`;
+     var current_url = new URL(window.location.href);
+     var rest_id = current_url.searchParams.get("rest_id");
+
+     const url = `/api/menu/view/${rest_id}`;
     fetch(url, { credentials: 'same-origin' })
       .then(response => response.json())
       .then(json => {

@@ -49,8 +49,8 @@ class CurrentRoute extends Component {
             path="/"
             render={() => <LoginPage setRedirect={this.changePath} />}
           />
-          <Route exact path="/edit-menu" component={EditMenu} />
-          <Route path="/view-menu/:rest_id" component={ViewMenu} />
+          <Route path="/edit-menu" component={EditMenu} />
+          <Route path="/view-menu" component={ViewMenu} />
         </Switch>
       </Router>
     );

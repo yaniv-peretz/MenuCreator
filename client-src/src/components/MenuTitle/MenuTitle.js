@@ -8,7 +8,7 @@ class MenuTitle extends Component {
       edit: this.props.edit,
       id: "",
       resturantName: "",
-      viewUrl: "/view-menu/"
+      viewUrl: ""
     };
   }
 
@@ -22,8 +22,9 @@ class MenuTitle extends Component {
   getResturantName() {
     let url = `/api/rest-name/`;
     if (!this.state.edit) {
-      let id = document.location.toString().substring(32);
-      url += id;
+      var current_url = new URL(window.location.href);
+      var rest_id = current_url.searchParams.get("rest_id");
+      url += rest_id;
     }
 
     const restName = new Promise((resolve, reject) => {
@@ -86,7 +87,7 @@ class MenuTitle extends Component {
       restId => {
         menu.setState({
           id: restId,
-          viewUrl: `/view-menu/${restId}`
+          viewUrl: `/view-menu/?rest_id=${restId}`
         });
       },
       () => {
@@ -103,7 +104,8 @@ class MenuTitle extends Component {
           View you'r created menu at this
           <a href={this.state.viewUrl} target="_blank">
             {" "}
-            Link{" "}
+            Link
+            {" "}
           </a>
           !
         </p>

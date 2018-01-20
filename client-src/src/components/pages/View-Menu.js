@@ -10,7 +10,7 @@ class ViewMenu extends Component {
       <div >
         <Header />
         <MenuTitle edit={false}/>
-        <Menu />
+        <Menu/>
     </div>
     );
   }
