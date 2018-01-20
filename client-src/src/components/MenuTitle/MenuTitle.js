@@ -5,7 +5,7 @@ class MenuTitle extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      edit: this.props.edit,
+      edit: false,
       id: "",
       resturantName: "",
       viewUrl: ""
@@ -13,6 +13,7 @@ class MenuTitle extends Component {
   }
 
   componentDidMount() {
+    this.setState({edit: this.props.edit});
     this.getResturantName();
     if (this.state.edit) {
       this.setviewUrl();
@@ -20,11 +21,11 @@ class MenuTitle extends Component {
   }
 
   getResturantName() {
-    let url = `/api/rest-name/`;
-    if (!this.state.edit) {
+    let url = `/api/rest-name`;
+    if (this.state.edit) {
       var current_url = new URL(window.location.href);
       var rest_id = current_url.searchParams.get("rest_id");
-      url += rest_id;
+      url += "/"+rest_id;
     }
 
     const restName = new Promise((resolve, reject) => {

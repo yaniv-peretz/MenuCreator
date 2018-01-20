@@ -9,7 +9,7 @@ const session = require("express-session");
 router.get("/", (req, res, next) => {
   let id = req.session.rest_id;
   let sql = `SELECT rest_name FROM Users WHERE id=${id}`;
-
+  
   con.query(sql, (err, result, fields) => {
     if (err || result[0].rest_name == undefined) {
       res.sendStatus(204);
