@@ -15,7 +15,7 @@ class MenuTitle extends Component {
   componentDidMount() {
     this.setState({edit: this.props.edit});
     this.getResturantName();
-    if (this.state.edit) {
+    if (this.props.edit) {
       this.setviewUrl();
     }
   }
