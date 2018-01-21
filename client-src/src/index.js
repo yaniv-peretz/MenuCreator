@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import CurrentRoute from "./components/CurrentRoute";
+import MainRoute from "./components/MainRoute";
 import registerServiceWorker from "./registerServiceWorker";
 import "../node_modules/jquery/dist/jquery.min.js";
 import "../node_modules/bootstrap/dist/js/bootstrap.min.js";
@@ -9,5 +9,5 @@ import "../node_modules/bootstrap/dist/js/bootstrap.min.js";
 import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 import "./style/main.css";
 
-ReactDOM.render(<CurrentRoute />, document.getElementById("root"));
+ReactDOM.render(<MainRoute />, document.getElementById("root"));
 registerServiceWorker();

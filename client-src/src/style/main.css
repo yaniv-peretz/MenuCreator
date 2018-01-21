@@ -43,3 +43,21 @@
 .rest-title {
     text-transform: capitalize;
 }
+
+/*  ####################
+        Icons    
+    #################### */
+
+    .icon{
+        width: 4vh;
+        height: 4vh;
+    }
+
+    .icon-hover{
+        opacity: 0.2;
+        transition: opacity 0.3s ease-in;
+    }
+
+    .icon-hover:hover{
+        opacity: 1;
+    }
