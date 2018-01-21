@@ -136,7 +136,7 @@ class Menu extends Component {
       xhr.onload = () => {
         if (xhr.readyState === 4) {
           console.log(xhr.readyState + xhr.status);
-          
+
           if (xhr.status === 200) {
             resolve(index);
           } else {
@@ -183,9 +183,10 @@ class Menu extends Component {
         title={item.title}
         price={item.price}
         descr={item.descr}
-        edit={this.editItem}
-        add={this.addItem}
-        remove={this.removeItem}
+        editMode={this.props.editMode}
+        edit={this.props.editMode && this.editItem}
+        add={this.props.editMode && this.addItem}
+        remove={this.props.editMode && this.removeItem}
       />
     ));
 

@@ -5,11 +5,13 @@ import {
   Route,
   Switch
 } from "react-router-dom";
-import LoginPage from "./pages/Login";
-import EditMenu from "./pages/Edit-Menu";
-import ViewMenu from "./pages/View-Menu";
 
-class CurrentRoute extends Component {
+// UI components
+import Header from "./Header/Header.js";
+import LoginPage from "./pages/Login";
+import MenuPage from "./pages/MenuPage";
+
+class MainRoute extends Component {
   constructor() {
     super();
     this.state = {
@@ -17,7 +19,7 @@ class CurrentRoute extends Component {
       path: "/"
     };
 
-    this.changePath = this.redirect.bind(this);
+    this.redirect = this.redirect.bind(this);
   }
 
   redirect(destination) {
@@ -37,24 +39,23 @@ class CurrentRoute extends Component {
             <Redirect to={this.state.path} />
           </Router>
         </div>
-      );
+      )
     }
 
     // show component by path
     return (
-      <Router>
-        <Switch>
-          <Route
-            exact
-            path="/"
-            render={() => <LoginPage setRedirect={this.changePath} />}
-          />
-          <Route path="/edit-menu" component={EditMenu} />
-          <Route path="/view-menu" component={ViewMenu} />
-        </Switch>
-      </Router>
+      <div>
+        <Header setRedirect={this.redirect} />
+        <Router>
+          <Switch>
+            <Route exact path="/" component={LoginPage} />
+            <Route path="/edit-menu" render={() => (<MenuPage editMode={true} />)} />
+            <Route path="/view-menu" render={() => (<MenuPage editMode={false} />)} />
+          </Switch>
+        </Router>
+      </div>
     );
   }
 }
 
-export default CurrentRoute;
+export default MainRoute;

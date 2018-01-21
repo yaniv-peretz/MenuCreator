@@ -9,7 +9,7 @@ const session = require("express-session");
 router.get("/", (req, res, next) => {
   let id = req.session.rest_id;
   let sql = `SELECT rest_name FROM Users WHERE id=${id}`;
-  
+
   con.query(sql, (err, result, fields) => {
     if (err || result[0].rest_name == undefined) {
       res.sendStatus(204);
@@ -33,75 +33,22 @@ router.get("/:id", (req, res) => {
   });
 });
 
-var isLoggedIn = (req, res, next) => {
-  // if (!req.session.auth) {
-  //   res.sendStatus(403);
-  // } else {
-  //   next();
-  // }
-  next();
-};
+router.put('/', (req, res) => {
+  let rest_name = req.body.rest_name;
+  let rest_id = req.session.rest_id;
 
-// router.get('/', checkAuth, function (req, res) {
+  let sql =
+    `UPDATE Users
+      SET rest_name='${rest_name}'
+      WHERE id=${rest_id}`;
 
-//   let sql = "SELECT rest_name FROM Users " +
-//     "WHERE id=" + req.session.rest_id;
-
-//   con.query(sql, function (err, result, fields) {
-//     if (err) {
-//       console.log(sql);
-//       throw err;
-//     }
-//     res.json(result[0].rest_name)
-//   });
-
-// });
-
-// router.post('/', checkAuth, function (req, res) {
-//   let rest_name = req.body.rest_name;
-//   let query =
-//     "UPDATE `Users` " +
-//     "SET `rest_name`='" + rest_name + "' " +
-//     "WHERE `id`=" + rest_id + ";";
-
-//   con.query(query, function (err, result, fields) {
-//     if (err) {
-//       console.log(query);
-//       throw err;
-//     }
-//   });
-//   res.json();
-// });
-
-// router.put('/', checkAuth, function (req, res) {
-//   let rest_name = req.body.rest_name;
-//   let query =
-//     "UPDATE `Users` " +
-//     "SET `rest_name`='" + rest_name + "' " +
-//     "WHERE `id`=" + rest_id + ";";
-
-//   con.query(query, function (err, result, fields) {
-//     if (err) {
-//       console.log(query);
-//       throw err;
-//     }
-//   });
-//   res.json();
-// });
-
-// router.delete('/', checkAuth, function (req, res) {
-//   let query =
-//     "UPDATE `Users` " +
-//     "SET `rest_name`='Resturant New Name' " +
-//     "WHERE `id`=" + rest_id + ";";
-
-//   con.query(query, function (err, result, fields) {
-//     if (err) {
-//       console.log(query);
-//       throw err;
-//     }
-//   });
-//   res.json();
-// });
+  con.query(sql, (err, result, fields) => {
+    if (err) {
+      console.log(sql);
+      throw err;
+    }
+  });
+  res.sendStatus(200);
+});
 
 module.exports = router;

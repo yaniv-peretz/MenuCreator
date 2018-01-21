@@ -55,15 +55,18 @@ export default class Item extends Component {
           index={this.props.index}
         />
 
-        <UserButtons
-          show={show}
-          id={this.props.id}
-          index={this.props.index}
-          seq={this.props.seq}
-          toggleEditMode={this.toggleEditMode}
-          remove={this.props.remove}
-          add={this.props.add}
-        />
+        {this.props.editMode &&
+          <UserButtons
+            show={show}
+            id={this.props.id}
+            index={this.props.index}
+            seq={this.props.seq}
+            toggleEditMode={this.toggleEditMode}
+            remove={this.props.remove}
+            add={this.props.add}
+          />
+        }
+
       </div>
     );
   }
