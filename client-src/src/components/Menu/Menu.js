@@ -183,6 +183,7 @@ class Menu extends Component {
         title={item.title}
         price={item.price}
         descr={item.descr}
+        // if menu not in edit mode, send false instead of connection to the menu items controls
         editMode={this.props.editMode}
         edit={this.props.editMode && this.editItem}
         add={this.props.editMode && this.addItem}

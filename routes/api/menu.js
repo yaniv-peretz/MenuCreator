@@ -1,6 +1,8 @@
 const express = require("express");
 const router = express.Router();
+const Restaurant = require("../../db/models/models.js").Restaurant;
 const con = require("../../config/mysqlCon.js");
+
 
 function checkAuth(req, res, next) {
   if (!req.session.auth) {
@@ -11,6 +13,14 @@ function checkAuth(req, res, next) {
 }
 
 router.get("/", checkAuth, (req, res) => {
+  let rest_id = req.session.rest_id;
+  Restaurant.where('id', rest_id).fetch({ withRelated: ['items'] })
+    .then(function (user) {
+      console.log(user.related('items').toJSON());
+    }).catch(function (err) {
+      console.error(err);
+    });
+
   let sql = `SELECT * FROM Menu_Items WHERE rest_id=${req.session.rest_id}`;
   con.query(sql, (err, result, fields) => {
     if (err) {

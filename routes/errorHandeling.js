@@ -1,5 +1,5 @@
 const express = require('express');
-const app = global.app;
+const app = express();
 
 // catch 404 and forward to error handler.
 app.use(function(req, res, next) {

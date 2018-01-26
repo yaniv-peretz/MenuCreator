@@ -1,7 +1,6 @@
 const express = require("express");
 const router = express.Router();
 const con = require("../../config/mysqlCon.js");
-const session = require("express-session");
 
 /**
  * Set resturant name for logged in edit menu

@@ -1,24 +1,8 @@
 const express = require('express');
 const con = require('../../config/mysqlCon.js');
 const router = express.Router();
-var session = require('express-session');
-const sessionStore = require('connect-session-knex');
-
-app.set('trust proxy', 1) // trust first proxy
-app.use(session({
-  secret: 'a',
-  resave: false,
-  saveUninitialized: true,
-  cookie: {
-    path: '/',
-    httpOnly: true,
-    secure: false,
-    maxAge: null
-  },
-  //TODO
-  // store: sessionStore,
-  proxy : true,
-}));
+const bodyParser = require('body-parser');
+const app = express();
 
 /**
  * Log In 
@@ -26,13 +10,15 @@ app.use(session({
 router.post('/', (req, res) => {
   let email = req.body.email;
   let passowrd = req.body.passowrd;
-  let query = `SELECT id FROM Users
-                  WHERE email= '${email}' AND password='${passowrd}'`;
+
+  let query =
+    `SELECT id FROM Users
+      WHERE email= '${email}' AND password='${passowrd}'`;
 
   con.query(query, (err, result, fields) => {
     if (err || result.length == 0) {
       res.sendStatus(403)
-    }else{
+    } else {
       req.session.auth = true;
       req.session.rest_id = result[0].id;
       res.sendStatus(200)

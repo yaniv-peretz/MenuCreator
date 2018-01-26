@@ -1,36 +1,28 @@
+require('dotenv').config();
 const express = require('express');
-const path = require('path');
-
+const bodyParser = require('body-parser');
 const app = express();
-global.app = app;
-
-// global setting for accessControl
-require('./config/accessControl.js');
-
-
+require('./libs/session.js')(app);
+const port = process.env.PORT || 8081;
 
 /*#######################
 * url Handeling sequance
 * #######################*/
 // setting routes for API
-const routes = require('./routes/index.js');
+const routes = require(`${__dirname}/routes/index.js`);
 app.use('/api', routes);
 // setting routes for static webpages
-app.use(express.static(path.join(__dirname, 'public')))
+app.use(express.static(`${__dirname}/public`))
 // a script tag to your application's JavaScript file(s) - required for react router BrowserHistory.
-app.get('*', function (request, response){
-    response.sendFile(path.resolve(__dirname, 'public', 'index.html'))
-  })
-  
+app.get('*', (request, response) => {
+  response.sendFile(`${__dirname}/public/index.html`);
+})
+
 //Error Handlers (Must be at the bottom!!!)
-require('./config/errorHandeling.js');
+require('./routes/errorHandeling.js');
 /*#####    END     #####*/
 
-
-
-
-
-//Start listen on port
-const port = 8081;
+//Start Node Server
 app.listen(port);
 console.log(`Node js listen on port ${port}...`);
+
