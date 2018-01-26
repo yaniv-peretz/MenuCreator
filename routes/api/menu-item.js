@@ -2,7 +2,6 @@ const express = require("express");
 const router = express.Router();
 const MenuItem = require("../../db/models/models.js").MenuItem;
 const isAuthenticated = require("../util/checkAuth.js");
-const con = require("../../config/mysqlCon.js");
 
 /**
  * Add new Item to the menu
