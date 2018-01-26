@@ -28,7 +28,7 @@ class LoginBox extends Component {
 
     const credentials = {
       email: this.state.usr,
-      passowrd: this.state.psw
+      password: this.state.psw
     };
     // login
     const login = new Promise((resolve, reject) => {
@@ -54,7 +54,7 @@ class LoginBox extends Component {
       response => {
         swal(
           "Cannot Login!",
-          "user and passowrd combination not exists",
+          "user and password combination not exists",
           "error"
         );
       }
@@ -69,7 +69,7 @@ class LoginBox extends Component {
     // create new user
     const credentials = {
       email: this.state.usr,
-      passowrd: this.state.psw
+      password: this.state.psw
     };
     const newUser = new Promise((resolve, reject) => {
       const url = "api/login/reg";

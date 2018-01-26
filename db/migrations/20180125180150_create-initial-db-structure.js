@@ -9,7 +9,7 @@ exports.up = (knex, Promise) => {
             table.timestamp('created_at').defaultTo(knex.fn.now());
             table.timestamp('updated_at').defaultTo(knex.fn.now());
         })
-        .createTable('menu-items', table => {
+        .createTable('menu_items', table => {
             table.integer('restaurant_id').unsigned();
             table.increments();
             table.string('title').notNullable();
@@ -24,6 +24,6 @@ exports.up = (knex, Promise) => {
 
 exports.down = function (knex, Promise) {
     return knex.schema
-        .dropTable('menu-items')
+        .dropTable('menu_items')
         .dropTable('restaurants')
 };

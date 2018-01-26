@@ -16,7 +16,6 @@ con.query(sql, function (err, result, fields) {
     throw err;
   }
 
-  console.log("confirmed:\tDB-MyMenu");
   createTables();
 });
 
@@ -62,7 +61,6 @@ function createTables() {
         console.log("failed to confirm DB -" + tableNames[i]);
         throw err;
       } else {
-        console.log("confirmed:\tTABLE-" + tableNames[i]);
       }
     });
   }

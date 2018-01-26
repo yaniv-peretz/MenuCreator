@@ -19,9 +19,10 @@ const apiFolder = `${__dirname}/api`;
 fs.readdir(apiFolder, (err, files) => {
     files.forEach(file => {
         let fileName = file.split(".");
-        let name = '/' + fileName[0];
-        var route = require(`${apiFolder}/${file}`);
-        app.use(name, route);
+        let routeName = '/' + fileName[0];
+        var apiFile = require(`${apiFolder}/${file}`);
+        console.log(`Mapping: /api${routeName}`);
+        app.use(routeName, apiFile);
     });
 })
 

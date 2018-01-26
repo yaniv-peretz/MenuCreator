@@ -2,8 +2,6 @@ import React, { Component } from "react";
 import { swal } from "sweetalert";
 import EditableTitle from "./EditableTitle";
 
-var iconsUrl = "../../../node_modules/bytesize-icons/dist/icons/";
-
 class MenuTitle extends Component {
   constructor(props) {
     super(props);
@@ -60,8 +58,7 @@ class MenuTitle extends Component {
         menu.setState({
           resturantName: responseRestName
         });
-      }
-      ).catch(status => {
+      }).catch(status => {
         swal(
           "Getting Resturant Name failed!",
           `cannot set the resurant name, failed with status: ${status}`,

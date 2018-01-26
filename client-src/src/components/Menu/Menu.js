@@ -21,7 +21,7 @@ class Menu extends Component {
       .then(response => response.json())
       .then(json => {
         if (0 < json.length) {
-          json.sort((a, b) => a.seq - b.seq);
+          json.sort((a, b) => a.sequence - b.sequence);
           this.setState({ menu: json });
         } else if (json.length === 0) {
           this.initializeMenu();
@@ -37,11 +37,11 @@ class Menu extends Component {
   addItem(index) {
     // adding item to state only if succesful on the server
     let newItem = {
-      item_id: 0,
-      seq: index + 1,
+      id: 0,
+      sequence: index + 1,
       title: "new name",
       price: 10,
-      descr: "new description"
+      description: "new description"
     };
 
     let addItemPromise = new Promise((resolve, reject) => {
@@ -64,15 +64,15 @@ class Menu extends Component {
     let menu = this.state.menu;
     addItemPromise.then(
       response => {
-        newItem.item_id = response;
+        newItem.id = response;
         if (0 < menu.length) {
           menu.forEach(item => {
-            if (item.seq >= newItem.seq) {
-              item.seq++;
+            if (item.sequence >= newItem.sequence) {
+              item.sequence++;
             }
           });
         }
-        menu.splice(newItem.seq, 0, newItem);
+        menu.splice(newItem.sequence, 0, newItem);
         this.setState({ menu: menu });
       },
       () => {
@@ -92,7 +92,7 @@ class Menu extends Component {
         editItem.price = newVal;
         break;
       case "descr":
-        editItem.descr = newVal;
+        editItem.description = newVal;
         break;
       default:
     }
@@ -153,8 +153,8 @@ class Menu extends Component {
         const deletedSeq = menu[index];
         menu.splice(index, 1);
         menu.map(menuItem => {
-          if (deletedSeq < menuItem.seq) {
-            menuItem.seq--;
+          if (deletedSeq < menuItem.sequence) {
+            menuItem.sequence--;
           }
           return menuItem;
         });
@@ -176,13 +176,13 @@ class Menu extends Component {
     const menu = this.state.menu;
     const menuItems = menu.map((item, index) => (
       <Item
-        id={item.item_id}
-        key={item.item_id}
+        id={item.id}
+        key={item.id}
         index={index}
-        seq={item.seq}
+        seq={item.sequence}
         title={item.title}
         price={item.price}
-        descr={item.descr}
+        descr={item.description}
         // if menu not in edit mode, send false instead of connection to the menu items controls
         editMode={this.props.editMode}
         edit={this.props.editMode && this.editItem}

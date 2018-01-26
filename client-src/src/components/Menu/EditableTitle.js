@@ -39,6 +39,7 @@ class EditableTitle extends Component {
         {!editMode && this.state.resturantName}
         <img onClick={this.toggleEditMode}
           src={require("../../../node_modules/bytesize-icons/dist/icons/edit.svg")}
+          alt="edit sign"
           className="icon icon-hover"
         />
       </span>

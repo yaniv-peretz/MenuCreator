@@ -1,49 +1,28 @@
 const express = require("express");
 const router = express.Router();
 const Restaurant = require("../../db/models/models.js").Restaurant;
-const con = require("../../config/mysqlCon.js");
+const checkAuth = require("../util/checkAuth.js");
 
-
-function checkAuth(req, res, next) {
-  if (!req.session.auth) {
-    res.json("no auth for menu");
-  } else {
-    next();
-  }
-}
-
-router.get("/", checkAuth, (req, res) => {
-  let rest_id = req.session.rest_id;
+router.get("/", [checkAuth], (req, res) => {
+  const rest_id = req.session.rest_id;
   Restaurant.where('id', rest_id).fetch({ withRelated: ['items'] })
-    .then(function (user) {
-      console.log(user.related('items').toJSON());
+    .then(restaurant => {
+      result = restaurant.related('items').toJSON();
+      res.json(result);
     }).catch(function (err) {
       console.error(err);
     });
-
-  let sql = `SELECT * FROM Menu_Items WHERE rest_id=${req.session.rest_id}`;
-  con.query(sql, (err, result, fields) => {
-    if (err) {
-      console.log(sql);
-      throw err;
-    }
-
-    res.json(result);
-  });
 });
 
 router.get("/view/:rest_id", (req, res) => {
   const rest_id = req.params.rest_id;
-  const sql = `SELECT * FROM Menu_Items WHERE rest_id=${rest_id}`;
-
-  con.query(sql, (err, result, fields) => {
-    if (err) {
-      console.error(sql);
-      throw err;
-    }
-
-    res.json(result);
-  });
+  Restaurant.where('id', rest_id).fetch({ withRelated: ['items'] })
+    .then(restaurant => {
+      result = restaurant.related('items').toJSON();
+      res.json(result);
+    }).catch(err => {
+      console.error(err);
+    });
 });
 
 module.exports = router;
