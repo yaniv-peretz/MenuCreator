@@ -2,7 +2,7 @@
 A personal project for creating, editing a viewing user created menus. <br />
 <b>Tech stack:</b> NodeJS (knex, bookshelf), MySql, ReactJS (with bootstrap).
 
-prerequisite:
+prerequisites:
 -------------
 1. NodeJS installed.
 2. MySql server installed
