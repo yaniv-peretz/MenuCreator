@@ -1,38 +1,16 @@
 # Menu Creator
 A personal project for creating, editing a viewing user created menus. <br />
-<b>Tech stack:</b> NodeJS, ReactJS, MySql.
-
+<b>Tech stack:</b> NodeJS (knex, bookshelf), MySql, ReactJS (with bootstrap).
 
 prerequisite:
 -------------
 1. NodeJS installed.
 2. MySql server installed
-+ port: 3306, 
-+ uid: "root"
-+ psw: "root"
-
+3. create a new .env file from the .env.default and populate all remaining feilds
 
 How to run
 -----------
-1. enter "npm install" to bring all required node_modules.
-2. enter "npm start"
-3. on the browser, surf to localhost:8081
-
-
-
-New Additions
------------
-+ Creation of initial DB schema 
-+ support for Resturant name
-+ logout header
-+ initial example gif
-+ fix example gif
-+ control for menu sequance
-+ support for enviroment ports
-
-In Process
------------
-+ support for section titles
-
-
-
+1. enter `npm install` | "Yarn install" to install all required node_modules.
+2. enter `knex migrate:latest` to update the DB schema
+3. enter `npm start`
+4. surf to localhost:8081
