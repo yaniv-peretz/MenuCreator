@@ -7,7 +7,7 @@ exports.up = (knex, Promise) => {
             table.string('password').notNullable();
             table.string('name').notNullable();
             table.timestamp('created_at').defaultTo(knex.fn.now());
-            table.timestamp('updated_at').defaultTo(knex.fn.now());
+            table.timestamp('updated_at');
         })
         .createTable('menu_items', table => {
             table.integer('restaurant_id').unsigned();
@@ -17,7 +17,7 @@ exports.up = (knex, Promise) => {
             table.integer('price').notNullable();
             table.integer('sequence').notNullable();
             table.timestamp('created_at').defaultTo(knex.fn.now());
-            table.timestamp('updated_at').defaultTo(knex.fn.now());
+            table.timestamp('updated_at');
             table.foreign('restaurant_id').references('restaurants.id');
         })
 };
