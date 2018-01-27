@@ -5,7 +5,7 @@ module.exports = {
       host: '127.0.0.1',
       user: 'root',
       password: 'root',
-      database: 'test-knex'
+      database: 'MenuSystemDB'
     },
     migrations: {
       directory: `${__dirname}/db/migrations`
