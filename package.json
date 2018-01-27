@@ -16,11 +16,10 @@
     "express-session": "^1.15.6",
     "knex": "^0.14.2",
     "mysql": "^2.15.0",
-    "pg": "^7.4.1",
     "session-file-store": "^1.2.0"
   },
   "author": "Yaniv Peretz",
   "devDependencies": {},
-  "description": "",
+  "description": "Simple menu creator using react & Node",
   "repository": "https://github.com/Yanipo5/MenuCreator"
 }
