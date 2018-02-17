@@ -1,14 +1,18 @@
 import React, { Component } from "react";
+import { observer } from "mobx-react";
 
+@observer
 class UserButtons extends Component {
   render() {
-    if (this.props.show) {
+    const props = this.props;
+    const store = props.store;
+    if (props.show) {
       return (
         <div className="User-Buttons">
           <button
             type="button"
             className="add-button"
-            onClick={() => this.props.add(this.props.index)}
+            onClick={() => store.addItem(this.props.index)}
           />
           <button
             type="button"
@@ -18,7 +22,7 @@ class UserButtons extends Component {
           <button
             type="button"
             className="remove-button"
-            onClick={() => this.props.remove(this.props.id, this.props.index)}
+            onClick={() => store.deleteItem(props.id, props.index)}
           />
         </div>
       );
