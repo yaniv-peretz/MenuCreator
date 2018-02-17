@@ -14,3 +14,6 @@ npm-debug.log
 #React
 /client-src/node_modules
 ####
+
+public
+client-src/build
