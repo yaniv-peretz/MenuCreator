@@ -27,7 +27,7 @@ class MenuTitle extends Component {
 
         {props.editMode && (
           <p>
-            View you'r created menu at this
+            {"View you'r created menu at this"}
             <a href={`view-menu/?rest_id=${store.getId()}`} target="_blank">
               {` Link! `}
             </a>
