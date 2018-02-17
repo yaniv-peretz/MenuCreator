@@ -29,15 +29,17 @@ router.post('/', (req, res) => {
  * Create a New User
    */
 router.post('/reg', (req, res) => {
-  let email = req.body.email;
-  let password = req.body.password;
+  const email = req.body.email;
+  const password = req.body.password;
+  console.log(email + password);
   Restaurant.forge({
     email: email,
     password: password
   }).save()
     .then(() => {
       res.sendStatus(200);
-    }).catch(() => {
+    }).catch(err => {
+      console.error(err);
       res.sendStatus(400);
     });
 });

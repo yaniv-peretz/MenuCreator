@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import swal from "sweetalert";
+import axios from "axios";
 
 class LoginBox extends Component {
   constructor(props) {
@@ -71,23 +72,8 @@ class LoginBox extends Component {
       email: this.state.usr,
       password: this.state.psw
     };
-    const newUser = new Promise((resolve, reject) => {
-      const url = "api/login/reg";
-      let xhr = new XMLHttpRequest();
-      xhr.open("POST", url, true);
-      xhr.setRequestHeader("Content-type", "application/json");
-      xhr.onload = () => {
-        if (xhr.status === 200) {
-          resolve(credentials);
-        } else {
-          reject(credentials);
-        }
-      };
-      xhr.onerror = () => reject();
-      xhr.send(JSON.stringify(credentials));
-    });
-
-    newUser.then(
+    const url = "api/login/reg";
+    axios.post(url, credentials).then(
       response => {
         swal(
           "New User Created!",
@@ -144,7 +130,7 @@ class LoginBox extends Component {
             className="btn btn-outline-primary bg-light"
             onClick={() => this.login()}
           >
-            Log in
+            {"Log in"}
           </button>
           <button
             type="button"

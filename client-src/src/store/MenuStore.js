@@ -3,16 +3,18 @@ import axios from "axios";
 import { observable } from "mobx";
 
 export default class MenuStore {
-  id;
+  @observable id = 0;
   @observable items = [];
   @observable resturantName = [];
-  constructor(id) {
-    this.id = id;
-    getItems.call(this, id);
-    getTitle.call(this, id);
+  constructor() {
+    (async ()=>{
+      this.id = await setId.call(this);
+      getItems.call(this, this.id);
+      getTitle.call(this, this.id);
+    })();
   }
 
-  getId(){
+  getId() {
     return this.id;
   }
 
@@ -104,6 +106,28 @@ export default class MenuStore {
 /** ##################
  *    Init functions
  ################## */
+
+async function setId() {
+  const match = "id=";
+  if(window.location.toString().includes(match)){
+    const location = window.location.toString()    
+    const id = location.substr(location.indexOf(match) + match.length);
+    return id
+  }else{
+    let url = "/api/login/rest_id";
+    const id = await axios
+    .get(url)
+    .then(res => {
+      return res.data;
+    })
+    .catch(err => {
+      console.error(err);
+      return 0;
+    });
+    return id;
+  }
+}
+
 function getItems(id) {
   let url = "/api/menu";
   if (id !== null) {

@@ -2,16 +2,16 @@ import React, { Component } from "react";
 import MenuTitle from "../Menu/Title/Menu-Title.js";
 import Menu from "../Menu/Items/Menu.js";
 
-import MenuStore from '../../store/MenuStore.js';
-import { observer } from 'mobx-react';
+import MenuStore from "../../store/MenuStore.js";
+import { observer } from "mobx-react";
 
 @observer
 class MenuPage extends Component {
   constructor(props) {
     super(props);
-    this.store = new MenuStore(1)
+    this.store = new MenuStore();
   }
-  
+
   render() {
     return (
       <div>
