@@ -138,6 +138,9 @@ function getItems(id) {
     .get(url)
     .then(res => {
       this.items = this.items.concat(res.data);
+      if (this.items < 1){
+        this.addItem(-1 )
+      }
     })
     .catch(err => {
       console.error(err);
